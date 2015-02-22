@@ -13,7 +13,9 @@ public class Index {
 
     @RequestMapping(value = "/index")
     public String index() {
+        System.out.println("hello i dasdsaam git example");
         return "index";
+
     }
 
 }
