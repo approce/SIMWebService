@@ -13,9 +13,7 @@ public class Index {
 
     @RequestMapping(value = "/index")
     public String index() {
-        System.out.println("i am new branch");
         return "index";
-
     }
 
 }

@@ -17,11 +17,11 @@
 <body ng-app="myApp">
 <jsp:include page="fragments/header.jsp"/>
 <div class="container">
-    <ul class="nav nav-pills nav-stacked col-sm-4">
+    <ul class="nav nav-pills nav-stacked col-sm-5 col-md-5 col-lg-offset-2 col-lg-4">
         <li role="presentation" class="active"><a href="#">My requests</a></li>
         <li role="presentation"><a href="#">Balance history</a></li>
     </ul>
-    <div class="col-sm-offset-2 col-sm-14">
+    <div class="col-sm-offset-1 col-sm-18 col-md-offset-1 col-md-14 col-lg-offset-1 col-lg-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 Your current requests

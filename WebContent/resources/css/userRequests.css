@@ -1,12 +1,17 @@
+.header {
+    margin: auto;
+}
+
 .requestsWrapper .row {
-    margin: 3px;
+    margin: 10px 5px 0px 5px;
 }
 
 .requestsWrapper .control-label {
+    min-width: 75px;
     padding: 0px 10px 0px 0px;
 }
 
-.requestsWrapper .value-label {
+.value-label {
     margin: 3px 0px 1px 0px;
     min-width: 100px;
 }
