@@ -13,7 +13,7 @@ public class Index {
 
     @RequestMapping(value = "/index")
     public String index() {
-        System.out.println("hello i dasdsaam git example");
+        System.out.println("i am new branch");
         return "index";
 
     }
