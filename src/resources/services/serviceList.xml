@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<services>
+    <service>
+        <id>
+            0
+        </id>
+        <shortName>
+            vk
+        </shortName>
+        <fullName>
+            Vkontakte
+        </fullName>
+        <price>
+            1.25
+        </price>
+        <iconPath>
+            vk.png
+        </iconPath>
+        <description>
+            The largest Social Netword in SND.
+        </description>
+    </service>
+    <service>
+        <id>
+            1
+        </id>
+        <shortName>
+            tw
+        </shortName>
+        <fullName>
+            Twitter
+        </fullName>
+        <price>
+            1.125
+        </price>
+        <iconPath>
+            tw.png
+        </iconPath>
+        <description>
+            The largest Social Netword in whole world.
+        </description>
+    </service>
+    <service>
+        <id>
+            2
+        </id>
+        <shortName>
+            ig
+        </shortName>
+        <fullName>
+            Instagram
+        </fullName>
+        <price>
+            1.0
+        </price>
+        <iconPath>
+            ig.png
+        </iconPath>
+        <description>
+            The largest Photo social network in whole world.
+        </description>
+    </service>
+</services>

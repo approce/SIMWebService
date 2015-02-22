@@ -1,0 +1,12 @@
+.requestsWrapper .row {
+    margin: 3px;
+}
+
+.requestsWrapper .control-label {
+    padding: 0px 10px 0px 0px;
+}
+
+.requestsWrapper .value-label {
+    margin: 3px 0px 1px 0px;
+    min-width: 100px;
+}

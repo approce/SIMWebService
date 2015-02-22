@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+        http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>myTag</short-name>
+    <uri>/tlds/ContestTags</uri>
+    <tag-file>
+        <name>service</name>
+        <path>/WEB-INF/tags/service/serviceProposition.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>login</name>
+        <path>/WEB-INF/tags/login/loginModalForm.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>serviceRequest</name>
+        <path>/WEB-INF/tags/profile/myServiceRequest.tag</path>
+    </tag-file>
+</taglib>

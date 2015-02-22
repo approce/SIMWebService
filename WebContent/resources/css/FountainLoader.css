@@ -1,0 +1,72 @@
+#fountainG {
+    position: relative;
+    width: 83px;
+    height: 10px
+}
+
+.fountainG {
+    position: absolute;
+    top: 0;
+    background-color: #29D5DB;
+    width: 11px;
+    height: 11px;
+    -webkit-animation-name: bounce_fountainG;
+    -webkit-animation-duration: 1.3s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: linear;
+    -webkit-transform: scale(.3);
+    -webkit-border-radius: 7px;
+}
+
+#fountainG_1 {
+    left: 0;
+    -webkit-animation-delay: 0.52s;
+}
+
+#fountainG_2 {
+    left: 10px;
+    -webkit-animation-delay: 0.65s;
+}
+
+#fountainG_3 {
+    left: 21px;
+    -webkit-animation-delay: 0.78s;
+}
+
+#fountainG_4 {
+    left: 31px;
+    -webkit-animation-delay: 0.91s;
+}
+
+#fountainG_5 {
+    left: 42px;
+    -webkit-animation-delay: 1.04s;
+}
+
+#fountainG_6 {
+    left: 52px;
+    -webkit-animation-delay: 1.17s;
+}
+
+#fountainG_7 {
+    left: 62px;
+    -webkit-animation-delay: 1.3s;
+}
+
+#fountainG_8 {
+    left: 73px;
+    -webkit-animation-delay: 1.43s;
+}
+
+@-webkit-keyframes bounce_fountainG {
+    0% {
+        -webkit-transform: scale(1);
+        background-color: #29D5DB;
+    }
+
+    100% {
+        -webkit-transform: scale(.3);
+        background-color: #541DCC;
+    }
+
+}
