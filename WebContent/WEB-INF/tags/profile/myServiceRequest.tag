@@ -19,6 +19,7 @@
                 submit</label>
             <label class="label label-info" ng-show="request.status=='WAIT_FOR_CODE'">Wait for code</label>
             <label class="label label-success" ng-show="request.status=='COMPLETED'">Completed</label>
+            <label class="label label-danger" ng-show="request.status=='NUMBER_REJECT'">Number reject</label>
         </div>
 
         <%-- price --%>
@@ -58,10 +59,10 @@
         </div>
         <div class="buttons row text-center" style="margin-bottom: 10px"> <%-- div with controll buttons --%>
             <div class="submitNumber" ng-show="request.status=='WAIT_FOR_NUMBER_SUBMIT'">
-                <button class="btn btn-primary btn-xs" ng-click="submitNumber(request,'true')">
+                <button class="btn btn-primary btn-xs" ng-click="submitNumber(request,true)">
                     Submit
                 </button>
-                <button class="btn btn-default btn-xs" ng-click="submitNumber(request,'false')">
+                <button class="btn btn-default btn-xs" ng-click="submitNumber(request,false)">
                     Dismiss
                 </button>
             </div>
@@ -70,8 +71,8 @@
                     Request for avaible number
                 </button>
             </div>
-            <div class="closeRequest" ng-show="request.status=='COMPLETED'">
-                <button class="btn btn-default btn-xs" ng-click="alert('1')">
+            <div class="closeRequest" ng-show="request.status=='COMPLETED' || request.status=='NUMBER_REJECT'">
+                <button class="btn btn-success btn-xs" ng-click="finishRequest(request)">
                     Close
                 </button>
             </div>

@@ -48,12 +48,14 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
     @Override
     @Transactional(readOnly = true)
     public List<Request> getRequestListByUsername(String username) {
+        //return non expired requests by user
         return (List<Request>) getHibernateTemplate()
-                .find("From Request as request where request.user.username=?", username);
+                .find("From Request as request where request.user.username=? and expired=0", username);
     }
 
     @Override
     public List<Request> getExecutableRequests() {
-        return (List<Request>) getHibernateTemplate().find("From Request where expired=0 and status!='STOP'");
+        //return from DB all requests which are not expired:
+        return (List<Request>) getHibernateTemplate().find("From Request where expired=0");
     }
 }

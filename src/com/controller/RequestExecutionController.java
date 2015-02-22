@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.service.AsynchronousRequestPoolService;
 import com.service.RequestExecutionService;
 import com.validation.exceptions.NotEnoughtUserBalance;
 import com.validation.exceptions.RequestNotExist;
@@ -22,6 +23,9 @@ import java.util.Map;
 public class RequestExecutionController {
     @Autowired
     private RequestExecutionService requestExecutionService;
+
+    @Autowired
+    private AsynchronousRequestPoolService asynchronousRequestPoolService;
 
     private static final long TIME_OUT_POLLING = 20000;
 
@@ -51,19 +55,11 @@ public class RequestExecutionController {
         deferredResult.onCompletion(new Runnable() {
             @Override
             public void run() {
-                requestExecutionService.removeGetNumberDeferredResult(requestId);
+                asynchronousRequestPoolService.removeGetNumberDeferredResult(requestId);
             }
         });
-        requestExecutionService.setGetNumberDeferredResult(requestId, deferredResult);
+        asynchronousRequestPoolService.setGetNumberDeferredResult(requestId, deferredResult);
         return deferredResult;
-    }
-
-    @RequestMapping(value = "/setRequestNumber", method = RequestMethod.GET)
-    @ResponseBody
-    public String setNumber(@RequestParam(value = "requestId") long requestId,
-                            @RequestParam(value = "number") long number) {
-        requestExecutionService.setRequestNumber(requestId, number);
-        return "asd";
     }
 
     @RequestMapping(value = "/submitRequestNumber", method = RequestMethod.GET)
@@ -71,8 +67,7 @@ public class RequestExecutionController {
     public Map<String, Object> submitNumber(Principal principal, @RequestParam(value = "id") long requestId,
                                             @RequestParam(value = "submit") boolean submit) {
         Map<String, Object> result = new LinkedHashMap<>();
-        requestExecutionService.userSubmitRequestNumber(requestExecutionService.getExecutableRequest(requestId),
-                submit);
+        requestExecutionService.userSubmitRequestNumber(principal.getName(),requestId, submit);
         result.put("success", true);
         return result;
     }
@@ -84,19 +79,18 @@ public class RequestExecutionController {
         deferredResult.onCompletion(new Runnable() {
             @Override
             public void run() {
-                requestExecutionService.removeGetCodeDeferredResult(requestId);
+                asynchronousRequestPoolService.removeGetCodeDeferredResult(requestId);
             }
         });
-        requestExecutionService.setGetCodeDeferredResult(requestId, deferredResult);
+        asynchronousRequestPoolService.setGetCodeDeferredResult(requestId, deferredResult);
         return deferredResult;
     }
 
-    @RequestMapping(value = "/setRequestCode", method = RequestMethod.GET)
+    @RequestMapping(value = "/setFinishRequest", method = RequestMethod.GET)
     @ResponseBody
-    public String setCode(@RequestParam(value = "requestId") long requestId,
-                          @RequestParam(value = "code") String number) {
-        requestExecutionService.setRequestCode(requestId, number);
-        return "asd";
+    public String finishRequest(@RequestParam(value = "requestId") long id) {
+        requestExecutionService.finishRequest(id);
+        return "OK";
     }
 
 }

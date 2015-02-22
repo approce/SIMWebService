@@ -67,12 +67,12 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
                 console.log(data);
             });
 
-        if (submit = true) {
+        if (submit == true) {
             request.status = "WAIT_FOR_CODE";
             //send ajax to get code:
             $scope.getRequestCode(request);
         } else {
-            request.status = "NUMBER_DISMISS";
+            request.status = "NUMBER_REJECT";
         }
     };
 
@@ -89,6 +89,16 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
                     request.code = data;
                     request.status = "COMPLETED";
                     console.log("received " + data);
+                }
+            });
+    };
+
+    $scope.finishRequest = function (request) {
+        console.log('finishing request ' + request.id);
+        $http.get("setFinishRequest?requestId=" + request.id, request)
+            .success(function (data) {
+                if (data == "OK") {
+                    $scope.requests.splice($scope.requests.indexOf(request), 1);
                 }
             });
     }

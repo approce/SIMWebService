@@ -1,7 +1,10 @@
 package com.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 
 @Entity
@@ -12,19 +15,22 @@ public class Request {
         STOP, PREPARE, WAIT_FOR_NUMBER,
         WAIT_FOR_NUMBER_SUBMIT,
         WAIT_FOR_CODE,
-        COMPLETED
+        COMPLETED,
+        NUMBER_REJECT
     }
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private int id;
+    private long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "propose_id")
     private Propose propose;
@@ -39,6 +45,7 @@ public class Request {
     @Column(name = "code")
     private String code;
 
+
     @Column(name = "started")
     private Date started;
 
@@ -48,11 +55,14 @@ public class Request {
     @Column(name = "expired")
     private boolean expired;
 
-    public int getId() {
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Transaction> transaction;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -118,5 +128,20 @@ public class Request {
 
     public void setExpired(boolean expired) {
         this.expired = expired;
+    }
+
+    public List<Transaction> getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(List<Transaction> transaction) {
+        this.transaction = transaction;
+    }
+
+    public void addTransaction(Transaction transaction1) {
+        if (this.transaction == null) {
+            transaction = new LinkedList<>();
+        }
+        this.transaction.add(transaction1);
     }
 }
