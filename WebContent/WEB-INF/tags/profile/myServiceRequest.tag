@@ -68,7 +68,10 @@
             </div>
             <div class="startRequest" ng-show="request.status=='STOP'">
                 <button class="btn btn-primary btn-xs" ng-click="startRequest(request)">
-                    Request for avaible number
+                    Start
+                </button>
+                <button class="btn btn-danger btn-xs" ng-click="removeRequest(request)">
+                    Remove
                 </button>
             </div>
             <div class="closeRequest" ng-show="request.status=='COMPLETED' || request.status=='NUMBER_REJECT'">

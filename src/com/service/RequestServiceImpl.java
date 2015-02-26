@@ -38,7 +38,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Request getRequest(int id) {
+    public Request getRequest(long id) {
         return requestDAO.getRequest(id);
     }
 

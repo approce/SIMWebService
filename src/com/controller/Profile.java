@@ -1,10 +1,12 @@
 package com.controller;
 
+import com.dao.ProposeDAO;
 import com.dao.RequestDAO;
 import com.model.Request;
 import com.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,8 +24,13 @@ public class Profile {
     @Autowired
     private RequestDAO requestDAO;
 
+    @Autowired
+    private ProposeDAO proposeDAO;
+
     @RequestMapping(value = "requests", method = RequestMethod.GET)
-    public String profile() {
+    public String profile(Model model) {
+        //set proposes:
+        model.addAttribute("proposes", proposeDAO.getProposes());
         return "requests";
     }
 
@@ -50,7 +57,9 @@ public class Profile {
             row.put("price", sum);
             row.put("status", r.getStatus());
             SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yy hh:mm");
-            row.put("started", sdf.format(r.getStarted()));
+            if (r.getStarted() != null) {
+                row.put("started", sdf.format(r.getStarted()));
+            }
             row.put("number", r.getNumber());
             row.put("code", r.getCode());
             result.add(row);

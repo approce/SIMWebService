@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.dao.RequestDAO;
 import com.model.Propose;
 import com.model.Request;
 import com.model.User;
@@ -32,6 +33,9 @@ public class RequestGeneralController {
     @Autowired
     private RequestService requestService;
 
+    @Autowired
+    private RequestDAO requestDAO;
+
     @PreAuthorize(value = "isAuthenticated()")
     @RequestMapping(value = "/addRequest")
     public
@@ -50,6 +54,7 @@ public class RequestGeneralController {
         request.setPropose(propose);
         requestService.saveRequest(request);
         result.put("success", true);
+        result.put("id", request.getId());
         return result;
     }
 
@@ -73,6 +78,23 @@ public class RequestGeneralController {
             );
         }
         return result;
+    }
+
+    @PreAuthorize(value = "isAuthenticated()")
+    @RequestMapping(value = "removeRequest")
+    @ResponseBody
+    public Map<String, Object> remove(@RequestParam(value = "id") long id) {
+        Request request = requestService.getRequest(id);
+        if (request.getStatus().equals(Request.STATUS.STOP)) {
+            //only requests with status STOP can be removed:
+            requestDAO.removeRequest(request);
+        }
+
+        return new LinkedHashMap<String, Object>() {
+            {
+                put("success", true);
+            }
+        };
     }
 
 

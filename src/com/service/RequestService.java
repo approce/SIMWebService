@@ -16,7 +16,7 @@ public interface RequestService {
 
     void mergeRequest(Request request);
 
-    Request getRequest(int id);
+    Request getRequest(long id);
 
     List<Request> getRequestListByUsername(String username);
 

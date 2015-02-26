@@ -40,8 +40,15 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
     }
 
     @Override
+    @Transactional
+    public void removeRequest(Request request) {
+        getHibernateTemplate().delete(request);
+    }
+
+
+    @Override
     @Transactional(readOnly = true)
-    public Request getRequest(int id) {
+    public Request getRequest(long id) {
         return getHibernateTemplate().load(Request.class, id);
     }
 

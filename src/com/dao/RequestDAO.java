@@ -15,9 +15,11 @@ public interface RequestDAO {
 
     void mergeRequest(Request request);
 
-    Request getRequest(int id);
+    void removeRequest(Request request);
 
-    List<Request> getAllRequestsByUsername(String username,int offset,int size);
+    Request getRequest(long id);
+
+    List<Request> getAllRequestsByUsername(String username, int offset, int size);
 
     List<Request> getExecutedRequestListByUsername(String username);
 
