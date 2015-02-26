@@ -5,6 +5,7 @@ import com.model.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,13 +17,20 @@ public class RequestExecutionPoolImpl implements RequestExecutionPool {
 
     @Autowired
     private RequestDAO requestDAO;
+
+    @Autowired
+    private AsynchronousRequestPoolService asynchronousRequestPoolService;
+
     //currently execution requests:
     private static List<Request> EXECUTION_REQUESTS_POOL = new LinkedList<>();
 
 
     @Override
+    @PostConstruct
     public void init() {
-        EXECUTION_REQUESTS_POOL = requestDAO.getExecutableRequests();
+        if (EXECUTION_REQUESTS_POOL.size() == 0) {
+            EXECUTION_REQUESTS_POOL = requestDAO.getExecutableRequests();
+        }
     }
 
     @Override
@@ -42,6 +50,19 @@ public class RequestExecutionPoolImpl implements RequestExecutionPool {
 
     @Override
     public void updateRequest(Request request) {
+        //if request contains and contains request has not number and updated request has number:
+        if (getRequestById(request.getId()) != null &&
+                getRequestById(request.getId()).getNumber() == 0 && request.getNumber() != 0) {
+            //if somebody already waits- response:
+            asynchronousRequestPoolService.setNumberResult(request.getId(), request.getNumber());
+        }
+
+        //if request contains and contains request has not code and updated request has number:
+        if (getRequestById(request.getId()) != null &&
+                getRequestById(request.getId()).getCode() == null && request.getCode() != null) {
+            //if somebody already waits- response:
+            asynchronousRequestPoolService.setCodeResult(request.getId(), request.getCode());
+        }
         if (getRequestById(request.getId()) != null) {
             EXECUTION_REQUESTS_POOL.remove(getRequestById(request.getId()));
         }

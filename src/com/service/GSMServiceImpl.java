@@ -1,8 +1,10 @@
 package com.service;
 
+import com.model.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Random;
 
 
@@ -12,6 +14,23 @@ public class GSMServiceImpl implements GSMService {
     @Autowired
     private RequestExecutionService requestExecutionService;
 
+    @Autowired
+    private RequestExecutionPool requestExecutionPool;
+
+    @Override
+    @PostConstruct
+    public void init() {
+        //go throw all requests in requestExecutePool and start request for each of them:
+        for (Request request : requestExecutionPool.getRequests()) {
+            if (request.getStatus().equals(Request.STATUS.WAIT_NUMBER)) {
+                //TODO create priority for reuquest:
+                startGetRequestNumber(request.getId(), request.getPropose().getId(), 10);
+            }
+            if (request.getStatus().equals(Request.STATUS.WAIT_CODE)) {
+                startGetRequestCode(request.getId());
+            }
+        }
+    }
 
     @Override
     public boolean startGetRequestNumber(final long requestId, long proposeId, float priority) {

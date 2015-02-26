@@ -14,10 +14,10 @@
             <label>Status: </label>
             <label class="label label-warning" ng-show="request.status=='STOP'">Stop</label>
             <label class="label label-default" ng-show="request.status=='PREPARE'">Prepare request</label>
-            <label class="label label-info" ng-show="request.status=='WAIT_FOR_NUMBER'">Wait for avaible number</label>
-            <label class="label label-success" ng-show="request.status=='WAIT_FOR_NUMBER_SUBMIT'">Wait for number
+            <label class="label label-info" ng-show="request.status=='WAIT_NUMBER'">Wait for avaible number</label>
+            <label class="label label-success" ng-show="request.status=='NUMBER_SUBMIT'">Wait for number
                 submit</label>
-            <label class="label label-info" ng-show="request.status=='WAIT_FOR_CODE'">Wait for code</label>
+            <label class="label label-info" ng-show="request.status=='WAIT_CODE'">Wait for code</label>
             <label class="label label-success" ng-show="request.status=='COMPLETED'">Completed</label>
             <label class="label label-danger" ng-show="request.status=='NUMBER_REJECT'">Number reject</label>
         </div>
@@ -38,7 +38,7 @@
                     Number:
                 </label>
                 <i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"
-                   ng-show="request.status=='WAIT_FOR_NUMBER'"></i>
+                   ng-show="request.status=='WAIT_NUMBER'"></i>
                 <label class="value-label label label-primary col-sm-6 col-xs-6"
                        ng-show="request.number!=0">
                     {{request.number}}
@@ -46,11 +46,11 @@
             </div>
             <div class="col-sm-12 col-xs-12"> <%-- code --%>
                 <label class="control-label col-sm-6 col-xs-6"
-                       ng-show="request.status=='WAIT_FOR_CODE' || request.status=='COMPLETED'">
+                       ng-show="request.status=='WAIT_CODE' || request.status=='COMPLETED'">
                     Code:
                 </label>
                 <i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"
-                   ng-show="request.status=='WAIT_FOR_CODE'"></i>
+                   ng-show="request.status=='WAIT_CODE'"></i>
                 <label class="value-label label label-success col-sm-6 col-xs-6" style="min-width: 100px"
                        ng-show="request.code!=null">
                     {{request.code}}
@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="buttons row text-center" style="margin-bottom: 10px"> <%-- div with controll buttons --%>
-            <div class="submitNumber" ng-show="request.status=='WAIT_FOR_NUMBER_SUBMIT'">
+            <div class="submitNumber" ng-show="request.status=='NUMBER_SUBMIT'">
                 <button class="btn btn-primary btn-xs" ng-click="submitNumber(request,true)">
                     Submit
                 </button>

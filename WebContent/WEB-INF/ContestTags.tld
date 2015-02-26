@@ -19,4 +19,8 @@
         <name>serviceRequest</name>
         <path>/WEB-INF/tags/profile/myServiceRequest.tag</path>
     </tag-file>
+    <tag-file>
+        <name>navbar</name>
+        <path>/WEB-INF/tags/profile/profileNavBar.tag</path>
+    </tag-file>
 </taglib>

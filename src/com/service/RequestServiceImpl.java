@@ -44,7 +44,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<Request> getRequestListByUsername(String username) {
-        return requestDAO.getRequestListByUsername(username);
+        return requestDAO.getExecutedRequestListByUsername(username);
     }
 
 

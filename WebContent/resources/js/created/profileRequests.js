@@ -8,11 +8,11 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
             //for each request (if status == wait4number):
             for (var i = 0; i < $scope.requests.length; i++) {
                 console.log($scope.requests[i].status);
-                if ($scope.requests[i].status == "WAIT_FOR_NUMBER") {
+                if ($scope.requests[i].status == "WAIT_NUMBER") {
                     //start long polling:
                     $scope.getRequestNumber($scope.requests[i]);
                 }
-                if ($scope.requests[i].status == "WAIT_FOR_CODE") {
+                if ($scope.requests[i].status == "WAIT_CODE") {
                     //start long polling for get code:
                     $scope.getRequestCode($scope.requests[i]);
                 }
@@ -32,7 +32,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
             .success(function (data, status, headers, config) {
                 if (data.success == true) {
                     //set new status to request view:
-                    request.status = "WAIT_FOR_NUMBER";
+                    request.status = "WAIT_NUMBER";
                     $scope.getRequestNumber(request);
                 } else {
                     //show error:
@@ -54,7 +54,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
                 } else {
                     //if number receivedd:
                     request.number = data;
-                    request.status = "WAIT_FOR_NUMBER_SUBMIT";
+                    request.status = "NUMBER_SUBMIT";
                     console.log("received " + data);
                 }
             });
@@ -68,7 +68,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
             });
 
         if (submit == true) {
-            request.status = "WAIT_FOR_CODE";
+            request.status = "WAIT_CODE";
             //send ajax to get code:
             $scope.getRequestCode(request);
         } else {

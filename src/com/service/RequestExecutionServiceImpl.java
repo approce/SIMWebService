@@ -27,27 +27,13 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
     private TransactionService transactionService;
 
     @Autowired
-    private AsynchronousRequestPoolService asynchronousRequestPoolService;
-
-    @Autowired
     private RequestExecutionPool requestExecutionPool;
 
-
+    //on startup server - initialization of all requests:
     @Override
     public void init() {
-        //init RequestExecutionPool:
         requestExecutionPool.init();
-
-        //go throw all requests in requestPool and check statuses:
-        for (Request request : requestExecutionPool.getRequests()) {
-            if (request.getStatus().equals(Request.STATUS.WAIT_FOR_NUMBER)) {
-                //TODO create priority for reuquest:
-                gsmService.startGetRequestNumber(request.getId(), request.getPropose().getId(), 10);
-            }
-            if (request.getStatus().equals(Request.STATUS.WAIT_FOR_CODE)) {
-                gsmService.startGetRequestCode(request.getId());
-            }
-        }
+        //   gsmService.init();
     }
 
     @Override
@@ -63,7 +49,7 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
             throw new NotEnoughtUserBalance();
         }
         //create new transaction:
-        final Transaction transaction = new Transaction();
+        Transaction transaction = new Transaction();
         transaction.setUser(user);
         transaction.setChange_value(-request.getPropose().getPrice());
 
@@ -76,7 +62,8 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
         //send request to gsm pool:
         gsmService.startGetRequestNumber(request.getId(), request.getPropose().getId(), 10);
         //set request status:
-        request.setStatus(Request.STATUS.WAIT_FOR_NUMBER);
+        request.setStatus(Request.STATUS.WAIT_NUMBER);
+        request.setStarted(new Date(System.currentTimeMillis()));
         //add to executable:
         requestExecutionPool.addRequest(request);
         requestExecutionPool.updateRequest(request);
@@ -92,11 +79,9 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
         //set number to request:
         request.setNumber(number);
         //set status:
-        request.setStatus(Request.STATUS.WAIT_FOR_NUMBER_SUBMIT);
+        request.setStatus(Request.STATUS.NUMBER_SUBMIT);
         //update in pool:
         requestExecutionPool.updateRequest(request);
-        //if somebody already waits- response:
-        asynchronousRequestPoolService.setNumberResult(id, number);
         return true;
     }
 
@@ -109,13 +94,14 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
         }
         gsmService.submitRequestNumber(request.getId(), submit);
         if (submit == true) {
-            request.setStatus(Request.STATUS.WAIT_FOR_CODE);
+            request.setStatus(Request.STATUS.WAIT_CODE);
         } else {
             User user = (User) userService.loadUserByUsername(username);
             //create plus transaction:
             Transaction transaction = new Transaction();
             transaction.setUser(user);
             transaction.setChange_value(-request.getTransaction().get(0).getChange_value());
+            transactionService.save(transaction);
             request.addTransaction(transaction);
             request.setStatus(Request.STATUS.NUMBER_REJECT);
         }
@@ -136,8 +122,6 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
         request.setStatus(Request.STATUS.COMPLETED);
         //update in pool:
         requestExecutionPool.updateRequest(request);
-        //if somebody already waits- response:
-        asynchronousRequestPoolService.setCodeResult(id, code);
         return true;
     }
 

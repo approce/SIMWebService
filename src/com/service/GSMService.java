@@ -3,6 +3,8 @@ package com.service;
 
 public interface GSMService {
 
+    void init();
+
     boolean startGetRequestNumber(long requestId, long proposeId, float priority);
 
 

@@ -12,9 +12,9 @@ import java.util.List;
 public class Request {
 
     public static enum STATUS {
-        STOP, PREPARE, WAIT_FOR_NUMBER,
-        WAIT_FOR_NUMBER_SUBMIT,
-        WAIT_FOR_CODE,
+        STOP, PREPARE, WAIT_NUMBER,
+        NUMBER_SUBMIT,
+        WAIT_CODE,
         COMPLETED,
         NUMBER_REJECT
     }

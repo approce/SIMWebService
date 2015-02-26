@@ -17,7 +17,9 @@ public interface RequestDAO {
 
     Request getRequest(int id);
 
-    List<Request> getRequestListByUsername(String username);
+    List<Request> getAllRequestsByUsername(String username,int offset,int size);
+
+    List<Request> getExecutedRequestListByUsername(String username);
 
     List<Request> getExecutableRequests();
 
