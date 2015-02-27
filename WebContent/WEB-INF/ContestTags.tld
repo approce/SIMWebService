@@ -23,4 +23,14 @@
         <name>navbar</name>
         <path>/WEB-INF/tags/profile/profileNavBar.tag</path>
     </tag-file>
+
+    <tag-file>
+        <name>adminHead</name>
+        <path>/WEB-INF/tags/static/adminHead.tag</path>
+    </tag-file>
+
+    <tag-file>
+        <name>headerNav</name>
+        <path>/WEB-INF/tags/static/HeaderNavbar.tag</path>
+    </tag-file>
 </taglib>
