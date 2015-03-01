@@ -1,7 +1,7 @@
 <title>SimService</title>
-<html lang="en">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
+<meta name="generator" content="Bootply"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <!--[if lt IE 9]>
@@ -40,4 +40,3 @@
 <script src="resources/packages/laddaBtnLoad/angular-ladda.min.js"></script>
 <%-- ladda button (download gif --%>
 
-<%-- fonts for

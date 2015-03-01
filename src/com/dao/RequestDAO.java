@@ -25,5 +25,7 @@ public interface RequestDAO {
 
     List<Request> getExecutableRequests();
 
+    List<Request> getAllRequest(int limit ,int offset);
 
+    long getRequestRowCount();
 }

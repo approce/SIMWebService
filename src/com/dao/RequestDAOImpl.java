@@ -1,7 +1,9 @@
 package com.dao;
 
 import com.model.Request;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -70,5 +72,21 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
     public List<Request> getExecutableRequests() {
         //return from DB all requests which are not expired:
         return (List<Request>) getHibernateTemplate().find("From Request where expired=0");
+    }
+
+    @Override
+    @Transactional
+    public List<Request> getAllRequest(int limit, int offset) {
+        Query q = getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery("From Request order by started DESC");
+        q.setFirstResult(offset);
+        q.setMaxResults(limit);
+        return (List<Request>) q.list();
+    }
+
+    @Override
+    @Transactional
+    public long getRequestRowCount() {
+        return (long) getSessionFactory().getCurrentSession().createCriteria(Request.class)
+                .setProjection(Projections.rowCount()).uniqueResult();
     }
 }

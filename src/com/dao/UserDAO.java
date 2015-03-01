@@ -7,6 +7,8 @@ package com.dao;
 
 import com.model.User;
 
+import java.util.List;
+
 /**
  * @author Роман
  */
@@ -17,5 +19,9 @@ public interface UserDAO {
     User getUser(String username);
 
     boolean isUserName(String username);
+
+
+
+    List<User> getUsers();
 
 }

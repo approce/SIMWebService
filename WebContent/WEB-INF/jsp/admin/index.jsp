@@ -4,9 +4,10 @@
 <html>
 <head>
     <myTag:adminHead/>
+    <script src="../resources/packages/admin/js/plugins/morris/morris-data.js"></script>
 </head>
 <body>
-<myTag:headerNav adminSlidePanel="true"/>
+<myTag:headerNav adminSlidePanel="true" page="dashboard"/>
 
 <div id="wrapper">
     <div id="page-wrapper">

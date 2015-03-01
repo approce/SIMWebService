@@ -45,4 +45,12 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
         return result.size() > 0;
     }
 
+    @Override
+    @Transactional
+    public List<User> getUsers() {
+        List<User> result = (List<User>) getHibernateTemplate()
+                .find("from User");
+        return result;
+    }
+
 }
