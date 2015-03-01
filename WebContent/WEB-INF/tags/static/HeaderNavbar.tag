@@ -56,6 +56,19 @@
                     <a href="users"><i class="fa fa-fw fa-user"></i>Users</a>
                 </li>
 
+                <li class="<c:out value="${page=='services' ? 'active': ''}"/>">
+                    <a href="javascript:" data-toggle="collapse" data-target="#services"><i
+                            class="fa fa-fw fa-arrows-v"></i> Services <i class="fa fa-fw fa-caret-down"></i></a>
+                    <ul id="services" class="collapse">
+                        <li>
+                            <a href="services"><i class="fa fa-fw fa-arrow-circle-right"></i> General</a>
+                        </li>
+                        <li>
+                            <a href="servicesTop"><i class="fa fa-fw fa-arrow-circle-right"></i> TOP</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="<c:out value="${page=='requests' ? 'active': ''}"/>">
                     <a href="requests"><i class="fa fa-fw fa-edit"></i>Requests</a>
                 </li>

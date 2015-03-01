@@ -6,9 +6,6 @@ import com.validation.exceptions.RequestNotExist;
 
 public interface RequestExecutionService {
 
-    //init requests pool from DataBase on server start up:
-    void init();
-
     //start request execution:
     boolean startRequest(String username, long requestId) throws RequestNotExist, NotEnoughtUserBalance;
 

@@ -76,8 +76,13 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
 
     @Override
     @Transactional
-    public List<Request> getAllRequest(int limit, int offset) {
-        Query q = getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery("From Request order by started DESC");
+    //TODO get this method from here to adminDao
+    public List<Request> getAllRequest(int limit, int offset, String order) {
+        String query = "From Request ";
+        if (order != null) {
+            query += order;
+        }
+        Query q = getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(query);
         q.setFirstResult(offset);
         q.setMaxResults(limit);
         return (List<Request>) q.list();

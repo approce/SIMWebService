@@ -2,10 +2,10 @@ package com.service;
 
 import com.dao.RequestDAO;
 import com.model.Request;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +14,8 @@ import java.util.List;
  */
 @Service("RequestExecutionPool")
 public class RequestExecutionPoolImpl implements RequestExecutionPool {
+
+    private static Logger LOG = Logger.getLogger(RequestExecutionPool.class);
 
     @Autowired
     private RequestDAO requestDAO;
@@ -26,20 +28,20 @@ public class RequestExecutionPoolImpl implements RequestExecutionPool {
 
 
     @Override
-    @PostConstruct
     public void init() {
+        LOG.info("Initialization of RequestExeutionPoolImpl");
         if (EXECUTION_REQUESTS_POOL.size() == 0) {
             EXECUTION_REQUESTS_POOL = requestDAO.getExecutableRequests();
         }
     }
 
     @Override
-    public void addRequest(Request request) {
+    public synchronized void addRequest(Request request) {
         EXECUTION_REQUESTS_POOL.add(request);
     }
 
     @Override
-    public Request getRequestById(long id) {
+    public synchronized Request getRequestById(long id) {
         for (Request request : EXECUTION_REQUESTS_POOL) {
             if (request.getId() == id) {
                 return request;
@@ -49,7 +51,7 @@ public class RequestExecutionPoolImpl implements RequestExecutionPool {
     }
 
     @Override
-    public void updateRequest(Request request) {
+    public synchronized void updateRequest(Request request) {
         //if request contains and contains request has not number and updated request has number:
         if (getRequestById(request.getId()) != null &&
                 getRequestById(request.getId()).getNumber() == 0 && request.getNumber() != 0) {
@@ -72,17 +74,17 @@ public class RequestExecutionPoolImpl implements RequestExecutionPool {
 
 
     @Override
-    public void setRequests(List<Request> requests) {
+    public synchronized void setRequests(List<Request> requests) {
         EXECUTION_REQUESTS_POOL = requests;
     }
 
     @Override
-    public List<Request> getRequests() {
+    public synchronized List<Request> getRequests() {
         return EXECUTION_REQUESTS_POOL;
     }
 
     @Override
-    public void removeRequest(long id) {
+    public synchronized void removeRequest(long id) {
         EXECUTION_REQUESTS_POOL.remove(id);
     }
 }

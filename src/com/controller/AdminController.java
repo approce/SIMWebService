@@ -7,16 +7,15 @@ import com.model.Request;
 import com.model.User;
 import com.model.views.LastRegistration;
 import com.model.views.LastRequest;
+import com.model.views.LastService;
+import com.model.views.ProposeGeneralStatistic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Роман on 27.02.2015.
@@ -45,7 +44,7 @@ public class AdminController {
     @RequestMapping(value = "admin/users/last")
     @ResponseBody
     public List<LastRegistration> usersLast() {
-        return viewsDAO.getLastRegistered("2015-02-27");
+        return viewsDAO.getLastRegistered("2015-02-01");
     }
 
     @RequestMapping(value = "admin/users/all")
@@ -72,14 +71,16 @@ public class AdminController {
     @RequestMapping(value = "admin/requests/last")
     @ResponseBody
     public List<LastRequest> lastRequests() {
-        return viewsDAO.getLastRequests("2015-02-20");
+        return viewsDAO.getLastRequests("2015-02-01");
     }
 
     @RequestMapping(value = "admin/requests/all")
     @ResponseBody
-    //TODO pagination
     public Object allRequests(@RequestParam(value = "limit") int limit,
-                              @RequestParam(value = "offset") int offset) {
+                              @RequestParam(value = "offset") int offset,
+                              @RequestParam(value = "sort", required = false) String sort,
+                              @RequestParam(value = "order", required = false) String order,
+                              @RequestParam(value = "search", required = false) String search) {
         class PaginatedResult {
             private long total;
             private List<Map<String, Object>> rows = new LinkedList<>();
@@ -101,10 +102,36 @@ public class AdminController {
             }
         }
 
+        String sqlOrder = null;
+        if (sort != null) {
+            sqlOrder = "order by";
+            if (sort.equals("id")) {
+                sqlOrder += " id";
+            } else if (sort.equals("username")) {
+                sqlOrder += " user.username";
+            } else if (sort.equals("service")) {
+                sqlOrder += " propose.fullName";
+            } else if (sort.equals("started")) {
+                sqlOrder += " started";
+            } else if (sort.equals("status")) {
+                sqlOrder += " status";
+            }
+            if (order.equals("desc")) {
+                sqlOrder += " DESC";
+            }
+        }
+        if (search != null) {
+            if (sqlOrder == null) {
+                sqlOrder = new String();
+            }
+            sqlOrder += "WHERE user.username LIKE '%" + search + "%'";
+        }
+
+
         PaginatedResult result = new PaginatedResult();
         result.total = requestDAO.getRequestRowCount();
 
-        for (final Request request : requestDAO.getAllRequest(limit, offset)) {
+        for (final Request request : requestDAO.getAllRequest(limit, offset, sqlOrder)) {
             result.rows.add(new LinkedHashMap<String, Object>() {
                 {
                     put("id", request.getId());
@@ -118,5 +145,45 @@ public class AdminController {
         return result;
     }
 
+
+    @RequestMapping(value = "admin/services")
+    public String services() {
+        return "admin\\services";
+    }
+
+    @RequestMapping(value = "admin/services/all")
+    @ResponseBody
+    public List<ProposeGeneralStatistic> getAllServicesStatistic() {
+        return viewsDAO.getProposeGeneralStatistic();
+    }
+
+    @RequestMapping(value = "admin/servicesTop")
+    public String servicesTop() {
+        return "admin\\servicesTop";
+    }
+
+    @RequestMapping(value = "admin/services/top")
+    @ResponseBody
+    public List<Map<String, Object>> servicesTopJson() {
+        Map<String, Map<String, Object>> result = new LinkedHashMap<>();
+        String query = "2015-02-01";
+        Set<String> services = new HashSet<>();
+        for (LastService ls : viewsDAO.getLastServices(query)) {
+            if (!result.containsKey(ls.getDateString())) {
+                Map<String, Object> row = new LinkedHashMap<>();
+                row.put("date", ls.getDateString());
+                row.put(ls.getService(), ls.getCount()+new Random().nextInt(100));
+                result.put(ls.getDateString(), row);
+            } else {
+                result.get(ls.getDateString()).put(ls.getService(), ls.getCount()+new Random().nextInt(100));
+            }
+            services.add(ls.getService());
+        }
+        List<Map<String, Object>> result1 = new LinkedList<>();
+        for (String key : result.keySet()) {
+            result1.add(result.get(key));
+        }
+        return result1;
+    }
 
 }

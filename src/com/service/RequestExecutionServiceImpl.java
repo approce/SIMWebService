@@ -5,6 +5,7 @@ import com.model.Transaction;
 import com.model.User;
 import com.validation.exceptions.NotEnoughtUserBalance;
 import com.validation.exceptions.RequestNotExist;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ import java.util.Date;
 @Service(value = "RequestExecutionService")
 public class RequestExecutionServiceImpl implements RequestExecutionService {
 
+    private static Logger LOG = Logger.getLogger(RequestExecutionServiceImpl.class);
+
     @Autowired
     private UserService userService;
 
@@ -28,13 +31,6 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
 
     @Autowired
     private RequestExecutionPool requestExecutionPool;
-
-    //on startup server - initialization of all requests:
-    @Override
-    public void init() {
-        requestExecutionPool.init();
-        //   gsmService.init();
-    }
 
     @Override
     public boolean startRequest(String username, long requestId) throws RequestNotExist, NotEnoughtUserBalance {
@@ -72,6 +68,7 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
 
     @Override
     public boolean setRequestNumber(long id, long number) {
+        LOG.info("set number for request id=" + id);
         Request request = requestExecutionPool.getRequestById(id);
         if (request == null) {
             return false;
@@ -112,6 +109,7 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
 
     @Override
     public boolean setRequestCode(long id, String code) {
+        LOG.info("set code for request id=" + id);
         Request request = requestExecutionPool.getRequestById(id);
         if (request == null) {
             return false;

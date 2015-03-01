@@ -60,11 +60,11 @@
                                data-search="true">
                             <thead>
                             <tr>
-                                <th data-field="id">ID</th>
-                                <th data-field="service">Service</th>
+                                <th data-field="id" data-sortable="true">ID</th>
+                                <th data-field="service" data-sortable="true">Service</th>
                                 <th data-field="username" data-sortable="true">Username</th>
-                                <th data-field="started" data-formatter="toDate">Started</th>
-                                <th data-field="status">Status</th>
+                                <th data-field="started" data-sortable="true" data-formatter="toDate">Started</th>
+                                <th data-field="status" data-sortable="true">Status</th>
                             </tr>
                             </thead>
                         </table>

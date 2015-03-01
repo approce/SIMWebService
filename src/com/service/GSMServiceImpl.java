@@ -1,15 +1,17 @@
 package com.service;
 
 import com.model.Request;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.Random;
 
 
 @Service(value = "GSMService")
 public class GSMServiceImpl implements GSMService {
+
+    private static Logger LOG = Logger.getLogger(GSMServiceImpl.class);
 
     @Autowired
     private RequestExecutionService requestExecutionService;
@@ -18,8 +20,9 @@ public class GSMServiceImpl implements GSMService {
     private RequestExecutionPool requestExecutionPool;
 
     @Override
-    @PostConstruct
+    //@PostConstruct
     public void init() {
+        LOG.info("Initialization of GSMServiceImpl");
         //go throw all requests in requestExecutePool and start request for each of them:
         for (Request request : requestExecutionPool.getRequests()) {
             if (request.getStatus().equals(Request.STATUS.WAIT_NUMBER)) {
