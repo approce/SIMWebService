@@ -76,7 +76,6 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
 
     @Override
     @Transactional
-    //TODO get this method from here to adminDao
     public List<Request> getAllRequest(int limit, int offset, String order) {
         String query = "From Request ";
         if (order != null) {

@@ -26,7 +26,7 @@
                     </h1>
                     <ol class="breadcrumb">
                         <li>
-                            <i class="fa fa-dashboard"></i> <a href="admin/dashboard">Dashboard</a>
+                            <i class="fa fa-dashboard"></i> <a href="dashboard">Dashboard</a>
                         </li>
                         <li class="active">
                             <i class="fa fa-user"></i> Users
@@ -54,12 +54,17 @@
                         <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Last registered</h3>
                     </div>
                     <div class="panel-body">
-                        <table data-toggle="table" data-url="users/all">
+                        <table data-toggle="table"
+                               data-url="users/all"
+                               data-pagination="true"
+                               data-side-pagination="server"
+                               data-page-list="[5, 10, 20, 50, 100, 200]"
+                               data-search="true">
                             <thead>
                             <tr>
-                                <th data-field="id">ID</th>
-                                <th data-field="username">Username</th>
-                                <th data-field="balance">Balance</th>
+                                <th data-sortable="true" data-field="id">ID</th>
+                                <th data-sortable="true" data-field="username">Username</th>
+                                <th data-sortable="true" data-field="balance">Balance</th>
                                 <th data-field="requests">Requests</th>
                             </tr>
                             </thead>

@@ -21,7 +21,8 @@ public interface UserDAO {
     boolean isUserName(String username);
 
 
+    long getUserCount();
 
-    List<User> getUsers();
+    List<User> getUsers(int limit,int offset,String query);
 
 }

@@ -27,7 +27,7 @@
                     </h1>
                     <ol class="breadcrumb">
                         <li>
-                            <i class="fa fa-dashboard"></i> <a href="admin/dashboard">Dashboard</a>
+                            <i class="fa fa-dashboard"></i> <a href="dashboard">Dashboard</a>
                         </li>
                         <li class="active">
                             <i class="fa fa-edit"></i> Requests

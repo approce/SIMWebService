@@ -6,7 +6,9 @@
 package com.dao;
 
 import com.model.User;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -47,10 +49,22 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 
     @Override
     @Transactional
-    public List<User> getUsers() {
-        List<User> result = (List<User>) getHibernateTemplate()
-                .find("from User");
-        return result;
+    public long getUserCount() {
+        return (long) getSessionFactory().getCurrentSession().createCriteria(User.class)
+                .setProjection(Projections.rowCount()).uniqueResult();
+    }
+
+    @Override
+    @Transactional
+    public List<User> getUsers(int limit, int offset, String order) {
+        String query = "From User ";
+        if (order != null) {
+            query += order;
+        }
+        Query q = getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(query);
+        q.setFirstResult(offset);
+        q.setMaxResults(limit);
+        return (List<User>) q.list();
     }
 
 }
