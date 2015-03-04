@@ -3,7 +3,9 @@ package com.controller.adminControllers;
 import com.dao.RequestDAO;
 import com.dao.ViewsDAO;
 import com.model.Request;
+import com.model.Transaction;
 import com.model.views.LastRequest;
+import com.service.RequestExecutionPool;
 import com.utils.PaginatedResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Роман on 02.03.2015.
@@ -25,6 +29,9 @@ public class AdminRequests {
 
     @Autowired
     private RequestDAO requestDAO;
+
+    @Autowired
+    private RequestExecutionPool requestExecutionPool;
 
     @RequestMapping(value = "admin/requests")
     public String requests() {
@@ -86,6 +93,38 @@ public class AdminRequests {
                     put("status", request.getStatus());
                 }
             });
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "admin/requestsPool")
+    public String getPool() {
+        return "admin\\requestsPool";
+    }
+
+
+    @RequestMapping(value = "admin/requests/pool")
+    @ResponseBody
+    List<Map<String, Object>> getPoolRequests() {
+        List<Map<String, Object>> result = new LinkedList<>();
+
+        int index = 0;
+        for (Request r : requestExecutionPool.getRequests()) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("index", index);
+            row.put("id", r.getId());
+            row.put("service", r.getPropose().getFullName());
+            row.put("username", r.getUser().getUsername());
+            List<Float> transactions = new LinkedList<>();
+            if (r.getTransaction() != null) {
+                for (Transaction t : r.getTransaction()) {
+                    transactions.add(t.getChange_value());
+                }
+            }
+            row.put("transactions", transactions);
+            row.put("status", r.getStatus());
+            result.add(row);
+            index++;
         }
         return result;
     }

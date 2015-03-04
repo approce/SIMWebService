@@ -19,13 +19,15 @@ public interface RequestDAO {
 
     Request getRequest(long id);
 
-    List<Request> getAllRequestsByUsername(String username, int offset, int size);
+    List<Request> getUserRequests(String username, int limit, int offset, String order);
 
-    List<Request> getExecutedRequestListByUsername(String username);
+    List<Request> getExecutableUserRequests(String username);
 
     List<Request> getExecutableRequests();
 
-    List<Request> getAllRequest(int limit ,int offset, String order);
+    List<Request> getAllRequest(int limit, int offset, String order);
 
     long getRequestRowCount();
+
+    long getUserRequestsRowCount(String username);
 }

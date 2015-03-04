@@ -43,7 +43,8 @@ public class Profile {
     @ResponseBody
     public List<Map<String, Object>> requestHistory(Principal principal) {
         //TODO pagination for request history:
-        List<Request> requests = requestDAO.getAllRequestsByUsername(principal.getName(), 0, 0);
+        List<Request> requests = null;
+        //requestDAO.getUserRequests(principal.getName(),0, 0, 0);
         List<Map<String, Object>> result = new LinkedList<>();
         for (Request r : requests) {
             Map<String, Object> row = new LinkedHashMap<>();

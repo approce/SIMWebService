@@ -14,23 +14,23 @@
 
 
 <!-- Bootstrap Core CSS -->
-<link href="../resources/packages/admin/css/bootstrap.min.css" rel="stylesheet">
+<link href="/resources/packages/admin/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom CSS -->
-<link href="../resources/packages/admin/css/sb-admin.css" rel="stylesheet">
+<link href="/resources/packages/admin/css/sb-admin.css" rel="stylesheet">
 
 <!-- Morris Charts CSS -->
-<link href="../resources/packages/admin/css/plugins/morris.css" rel="stylesheet">
+<link href="/resources/packages/admin/css/plugins/morris.css" rel="stylesheet">
 
 <!-- Custom Fonts -->
-<link href="../resources/packages/admin/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="/resources/packages/admin/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-<script src="../resources/js/custom/jquery-2.1.3.min.js"></script>
+<script src="/resources/js/custom/jquery-2.1.3.min.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="../resources/packages/admin/js/bootstrap.min.js"></script>
+<script src="/resources/packages/admin/js/bootstrap.min.js"></script>
 
 <!-- Morris Charts JavaScript -->
-<script src="../resources/packages/admin/js/plugins/morris/raphael.min.js"></script>
-<script src="../resources/packages/admin/js/plugins/morris/morris.min.js"></script>
+<script src="/resources/packages/admin/js/plugins/morris/raphael.min.js"></script>
+<script src="/resources/packages/admin/js/plugins/morris/morris.min.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>

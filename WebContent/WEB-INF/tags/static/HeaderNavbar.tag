@@ -14,7 +14,7 @@
     </div>
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="services">Services</a></li>
+            <li><a href="/services">Services</a></li>
 
             <security:authorize access="!isAuthenticated()">
                 <li><a href="#" data-toggle="modal" data-target="#loginModal">Login</a></li>
@@ -56,6 +56,10 @@
                     <a href="users"><i class="fa fa-fw fa-user"></i>Users</a>
                 </li>
 
+                <li class="<c:out value="${page=='requestsPool' ? 'active': ''}"/>">
+
+                </li>
+
                 <li class="<c:out value="${page=='services' ? 'active': ''}"/>">
                     <a href="javascript:" data-toggle="collapse" data-target="#services"><i
                             class="fa fa-fw fa-arrows-v"></i> Services <i class="fa fa-fw fa-caret-down"></i></a>
@@ -70,7 +74,19 @@
                 </li>
 
                 <li class="<c:out value="${page=='requests' ? 'active': ''}"/>">
-                    <a href="requests"><i class="fa fa-fw fa-edit"></i>Requests</a>
+
+
+                    <a href="javascript:" data-toggle="collapse" data-target="#requests"><i
+                            class="fa fa-fw fa-dashboard"></i> Requests <i class="fa fa-fw fa-caret-down"></i></a>
+                    <ul id="requests" class="collapse">
+                        <li>
+                            <a href="requests"><i class="fa fa-fw fa-edit"></i>Requests</a>
+                        </li>
+                        <li>
+                            <a href="requestsPool"><i class="fa fa-fw fa-dashboard"></i> Requests Pool</a>
+                        </li>
+                    </ul>
+
                 </li>
 
                 <li>

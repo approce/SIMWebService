@@ -56,13 +56,23 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
 
     @Override
     @Transactional
-    public List<Request> getAllRequestsByUsername(String username, int offset, int size) {
-        return (List<Request>) getHibernateTemplate().find("From Request as request where request.user.username=?", username);
+    public List<Request> getUserRequests(String username, int limit, int offset, String order) {
+        String query = "From Request ";
+        query += " where user.username=? ";
+        if (order != null) {
+            query += order;
+        }
+
+        Query q = getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(query);
+        q.setParameter(0, username);
+        q.setFirstResult(offset);
+        q.setMaxResults(limit);
+        return (List<Request>) q.list();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Request> getExecutedRequestListByUsername(String username) {
+    public List<Request> getExecutableUserRequests(String username) {
         //return non expired requests by user
         return (List<Request>) getHibernateTemplate()
                 .find("From Request as request where request.user.username=? and expired=0", username);
@@ -92,5 +102,13 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
     public long getRequestRowCount() {
         return (long) getSessionFactory().getCurrentSession().createCriteria(Request.class)
                 .setProjection(Projections.rowCount()).uniqueResult();
+    }
+
+    @Override
+    @Transactional
+    public long getUserRequestsRowCount(String username) {
+        return (Long) getSessionFactory().getCurrentSession().createQuery("select count(*) from Request where user.username=?")
+                .setParameter(0, username)
+                .uniqueResult();
     }
 }

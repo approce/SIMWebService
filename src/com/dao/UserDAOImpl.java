@@ -28,6 +28,11 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
     }
 
     @Override
+    public User getUser(long id) {
+        return getHibernateTemplate().get(User.class, id);
+    }
+
+    @Override
     @Transactional
     public void saveUser(User u) {
         getHibernateTemplate().saveOrUpdate(u);

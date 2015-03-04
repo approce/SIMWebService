@@ -1,12 +1,16 @@
 package com.controller.adminControllers;
 
+import com.dao.RequestDAO;
 import com.dao.UserDAO;
 import com.dao.ViewsDAO;
+import com.model.Request;
+import com.model.Transaction;
 import com.model.User;
 import com.model.views.LastRegistration;
 import com.utils.PaginatedResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,9 +30,65 @@ public class AdminUsers {
     @Autowired
     private UserDAO userDAO;
 
+    @Autowired
+    private RequestDAO requestDAO;
+
     @RequestMapping(value = "admin/users")
     public String users() {
         return "admin\\users";
+    }
+
+    @RequestMapping(value = "admin/users", params = "username")
+    public String user(Model model, @RequestParam(value = "username") String username) {
+        model.addAttribute("user", userDAO.getUser(username));
+        return "admin\\user";
+    }
+
+    @RequestMapping(value = "admin/users/requests")
+    public
+    @ResponseBody
+    PaginatedResult userRequests(
+            @RequestParam(value = "limit") int limit,
+            @RequestParam(value = "username") String username,
+            @RequestParam(value = "offset") int offset,
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "order", required = false) String order) {
+
+        String sqlOrder = null;
+        if (sort != null) {
+            sqlOrder = "order by";
+            if (sort.equals("service")) {
+                sqlOrder += " propose.fullName";
+            } else if (sort.equals("started")) {
+                sqlOrder += " started";
+            } else if (sort.equals("status")) {
+                sqlOrder += " status";
+            }
+            if (order.equals("desc")) {
+                sqlOrder += " DESC";
+            }
+        }
+
+        PaginatedResult result = new PaginatedResult();
+        result.setTotal(requestDAO.getUserRequestsRowCount(username));
+
+        for (final Request request : requestDAO.getUserRequests(username, limit, offset, sqlOrder)) {
+            result.getRows().add(new LinkedHashMap<String, Object>() {
+                {
+                    put("id", request.getId());
+                    put("service", request.getPropose().getFullName());
+                    put("started", request.getStarted());
+                    put("status", request.getStatus());
+                    //get sum of transactions:
+                    float sum = 0;
+                    for (Transaction t : request.getTransaction()) {
+                        sum -= t.getChange_value();
+                    }
+                    put("transactions", sum);
+                }
+            });
+        }
+        return result;
     }
 
 
