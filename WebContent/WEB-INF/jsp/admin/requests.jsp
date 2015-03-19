@@ -69,6 +69,7 @@
                             </thead>
                         </table>
                         <script>
+                            //TODO export out it
                             function toDate(value) {
                                 var date = new Date(value).toISOString();
                                 return date.slice(5, 10) + " " + date.slice(11, 19);

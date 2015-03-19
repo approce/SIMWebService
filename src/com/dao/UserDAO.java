@@ -14,14 +14,11 @@ import java.util.List;
  */
 public interface UserDAO {
 
-    User getUser(long id);
-
     void saveUser(User u);
 
     User getUser(String username);
 
-    boolean isUserName(String username);
-
+    boolean usernameExist(String username);
 
     long getUserCount();
 

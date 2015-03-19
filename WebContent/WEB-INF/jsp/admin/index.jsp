@@ -174,7 +174,7 @@
                             <div class="list-group">
                                 <a href="#" class="list-group-item">
                                     <span class="badge">just now</span>
-                                    <i class="fa fa-fw fa-calendar"></i> Calendar updated
+                                    <i class="fa fa-fw fa-registered"></i> Calendar updated
                                 </a>
                                 <a href="#" class="list-group-item">
                                     <span class="badge">4 minutes ago</span>

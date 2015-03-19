@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -21,7 +22,6 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
     public void init(SessionFactory sessionFactory) {
         setSessionFactory(sessionFactory);
     }
-
 
     @Override
     @Transactional
@@ -37,37 +37,14 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
 
     @Override
     @Transactional
-    public void mergeRequest(Request request) {
-        getHibernateTemplate().merge(request);
-    }
-
-    @Override
-    @Transactional
     public void removeRequest(Request request) {
         getHibernateTemplate().delete(request);
     }
-
 
     @Override
     @Transactional(readOnly = true)
     public Request getRequest(long id) {
         return getHibernateTemplate().load(Request.class, id);
-    }
-
-    @Override
-    @Transactional
-    public List<Request> getUserRequests(String username, int limit, int offset, String order) {
-        String query = "From Request ";
-        query += " where user.username=? ";
-        if (order != null) {
-            query += order;
-        }
-
-        Query q = getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(query);
-        q.setParameter(0, username);
-        q.setFirstResult(offset);
-        q.setMaxResults(limit);
-        return (List<Request>) q.list();
     }
 
     @Override
@@ -86,12 +63,35 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
 
     @Override
     @Transactional
-    public List<Request> getAllRequest(int limit, int offset, String order) {
-        String query = "From Request ";
-        if (order != null) {
-            query += order;
+    public List<Request> getRequests(int limit, int offset, String sort, String order, String username) {
+        String query = "From Request";
+        if (!StringUtils.isEmpty(username)) {
+            query += " WHERE user.username= :username";
         }
+        query+=" ORDER BY :order";
+        if(!StringUtils.isEmpty(order)){
+            query+=" DESC";
+        }
+
         Query q = getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(query);
+        if (!StringUtils.isEmpty(username)) {
+            q.setParameter("username",username);
+        }
+        if (!StringUtils.isEmpty(sort)) {
+            if (sort.equals("id")) {
+                q.setParameter("order","id");
+            } else if (sort.equals("username")) {
+                q.setParameter("order","user.username");
+            } else if (sort.equals("service")) {
+                q.setParameter("order","propose.fullName");
+            } else if (sort.equals("started")) {
+                q.setParameter("order","started");
+            } else if (sort.equals("status")) {
+                q.setParameter("order","status");
+            }
+        }else{
+            q.setParameter("order","id");
+        }
         q.setFirstResult(offset);
         q.setMaxResults(limit);
         return (List<Request>) q.list();

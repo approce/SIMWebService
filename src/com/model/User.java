@@ -24,18 +24,8 @@ import java.util.List;
 public class User implements UserDetails {
 
     public static enum UserRole {
-
-        USER(1, "ROLE_USER"),
-        ADMIN(2, "ROLE_ADMIN");
-
-        private int id;
-        private String name;
-
-        UserRole(int id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-
+        ROLE_USER,
+        ROLE_ADMIN
     }
 
     @Id
@@ -69,7 +59,7 @@ public class User implements UserDetails {
     private List<Transaction> transactions;
 
     @Column(name = "registered")
-    private Calendar calendar;
+    private Calendar registered;
 
     public long getId() {
         return id;
@@ -147,7 +137,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         LinkedList<GrantedAuthority> linkedList = new LinkedList<>();
-        linkedList.add(new SimpleGrantedAuthority(role.name));
+        linkedList.add(new SimpleGrantedAuthority(role.toString()));
         return linkedList;
     }
 
@@ -171,11 +161,11 @@ public class User implements UserDetails {
         return true;
     }
 
-    public Calendar getCalendar() {
-        return calendar;
+    public Calendar getRegistered() {
+        return registered;
     }
 
-    public void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
+    public void setRegistered(Calendar registered) {
+        this.registered = registered;
     }
 }

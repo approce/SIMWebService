@@ -17,6 +17,4 @@ public interface ProposeDAO {
     List<Propose> getProposes();
 
     Propose getPropose(int id);
-
-    void setProposes(List<Propose> list);
 }

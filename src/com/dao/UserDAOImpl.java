@@ -28,11 +28,6 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
     }
 
     @Override
-    public User getUser(long id) {
-        return getHibernateTemplate().get(User.class, id);
-    }
-
-    @Override
     @Transactional
     public void saveUser(User u) {
         getHibernateTemplate().saveOrUpdate(u);
@@ -47,7 +42,7 @@ public class UserDAOImpl extends HibernateDaoSupport implements UserDAO {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean isUserName(String username) {
+    public boolean usernameExist(String username) {
         List<User> result = (List<User>) getHibernateTemplate().find("from User where username=?", username);
         return result.size() > 0;
     }
