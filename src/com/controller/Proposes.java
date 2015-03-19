@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -21,13 +22,20 @@ import java.util.List;
 public class Proposes {
 
     @Autowired
-    private ProposeService servicesService;
+    private ProposeService proposeService;
 
     @RequestMapping(value = "/services")
     public String getProposesList(Model model) {
-        List<Propose> proposes = servicesService.getProposes();
+        List<Propose> proposes = proposeService.getProposes();
         model.addAttribute("services", proposes);
         return "services";
+    }
+
+
+    @RequestMapping(value = "getServices")
+    @ResponseBody
+    public List<Propose> getProposes() {
+        return proposeService.getProposes();
     }
 
 }

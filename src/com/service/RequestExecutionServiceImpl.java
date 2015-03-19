@@ -1,19 +1,15 @@
 package com.service;
 
-import com.dao.RequestDAO;
 import com.model.Request;
 import com.model.Transaction;
 import com.model.User;
 import com.validation.exceptions.NotEnoughtUserBalance;
 import com.validation.exceptions.RequestNotExist;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 
 /**
  * Created by Роман on 17.02.2015.
@@ -22,6 +18,8 @@ import java.util.Map;
 @Service(value = "RequestExecutionService")
 public class RequestExecutionServiceImpl implements RequestExecutionService {
 
+    private static Logger LOG = Logger.getLogger(RequestExecutionServiceImpl.class);
+
     @Autowired
     private UserService userService;
 
@@ -29,24 +27,10 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
     private GSMService gsmService;
 
     @Autowired
-    private RequestDAO requestDAO;
-
-    @Autowired
     private TransactionService transactionService;
 
-    //currently execution requests:
-    private static List<Request> EXECUTION_REQUESTS_POOL = new LinkedList<>();
-
-    //suspended controllers for number response:
-    private static Map<Long, DeferredResult<Long>> REQUEST_NUMBER_MAP = new LinkedHashMap<>();
-
-    //suspended controllers for request response:
-    private static Map<Long, DeferredResult<String>> REQUEST_CODE_MAP = new LinkedHashMap<>();
-
-    @Override
-    public void addExecutableRequst(Request request) {
-        EXECUTION_REQUESTS_POOL.add(request);
-    }
+    @Autowired
+    private RequestExecutionPool requestExecutionPool;
 
     @Override
     public boolean startRequest(String username, long requestId) throws RequestNotExist, NotEnoughtUserBalance {
@@ -60,141 +44,93 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
         if (!(user.getBalance() >= request.getPropose().getPrice())) {
             throw new NotEnoughtUserBalance();
         }
-        //if request exist and money is enought:
         //create new transaction:
         Transaction transaction = new Transaction();
         transaction.setUser(user);
         transaction.setChange_value(-request.getPropose().getPrice());
-        //save transaction:
+
+        //save transaction to db:
         transactionService.save(transaction);
-        //send request to pool:
+
+        //save transaction to request:
+        request.addTransaction(transaction);
+
+        //send request to gsm pool:
         gsmService.startGetRequestNumber(request.getId(), request.getPropose().getId(), 10);
         //set request status:
-        request.setStatus(Request.STATUS.WAIT_FOR_NUMBER);
-        requestDAO.updateRequest(request);
-
+        request.setStatus(Request.STATUS.WAIT_NUMBER);
+        request.setStarted(new Date(System.currentTimeMillis()));
         //add to executable:
-        addExecutableRequst(request);
+        requestExecutionPool.addRequest(request);
+        requestExecutionPool.updateRequest(request);
         return true;
-    }
-
-    @Override
-    public Request getExecutableRequest(long id) {
-        //TODO: create initialization of requests on server up.
-        //init kostil:
-        if (EXECUTION_REQUESTS_POOL.size() == 0) {
-            EXECUTION_REQUESTS_POOL = requestDAO.getExecutableRequests();
-        }
-        for (Request request : EXECUTION_REQUESTS_POOL) {
-            if (request.getId() == id) {
-                return request;
-            }
-        }
-        return null;
     }
 
     @Override
     public boolean setRequestNumber(long id, long number) {
-        //check if Request exist:
-        if (getExecutableRequest(id) == null) {
+        LOG.info("set number for request id=" + id);
+        Request request = requestExecutionPool.getRequestById(id);
+        if (request == null) {
             return false;
         }
         //set number to request:
-        getExecutableRequest(id).setNumber(number);
+        request.setNumber(number);
         //set status:
-        getExecutableRequest(id).setStatus(Request.STATUS.WAIT_FOR_NUMBER_SUBMIT);
-        //update request in db:
-        requestDAO.updateRequest(getExecutableRequest(id));
-        //if smbd already waits for this number:
-        if (REQUEST_NUMBER_MAP.containsKey(id)) {
-            REQUEST_NUMBER_MAP.get(id).setResult(number);
-        }
+        request.setStatus(Request.STATUS.NUMBER_SUBMIT);
+        //update in pool:
+        requestExecutionPool.updateRequest(request);
         return true;
     }
 
 
     @Override
-    public boolean setGetNumberDeferredResult(long requestId, DeferredResult<Long> getNumberDeferredResult) {
-        if (getExecutableRequest(requestId) == null) {
+    public boolean userSubmitRequestNumber(String username, long id, boolean submit) {
+        Request request = requestExecutionPool.getRequestById(id);
+        if (request == null) {
             return false;
         }
-        //if already contains:
-        if (REQUEST_NUMBER_MAP.containsKey(requestId)) {
-            REQUEST_NUMBER_MAP.remove(requestId);
-        }
-        REQUEST_NUMBER_MAP.put(requestId, getNumberDeferredResult);
-        //if number already contains:
-        if (getExecutableRequest(requestId).getNumber() != 0) {
-            getNumberDeferredResult.setResult(getExecutableRequest(requestId).getNumber());
-        }
-        return true;
-    }
-
-    @Override
-    public boolean removeGetNumberDeferredResult(long requestId) {
-        if (REQUEST_NUMBER_MAP.containsKey(requestId)) {
-            REQUEST_NUMBER_MAP.remove(requestId);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean userSubmitRequestNumber(Request request, boolean submit) {
+        gsmService.submitRequestNumber(request.getId(), submit);
         if (submit == true) {
-            gsmService.submitRequestNumber(request.getId(), submit);
-            //set status:
-            request.setStatus(Request.STATUS.WAIT_FOR_CODE);
-            requestDAO.updateRequest(request);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean setGetCodeDeferredResult(long requestId, DeferredResult<String> getCodeDeferredResult) {
-        if (getExecutableRequest(requestId) == null) {
-            return false;
-        }
-        //if already contains:
-        if (REQUEST_CODE_MAP.containsKey(requestId)) {
-            REQUEST_CODE_MAP.remove(requestId);
-        }
-        REQUEST_CODE_MAP.put(requestId, getCodeDeferredResult);
-        //if number already contains:
-        if (getExecutableRequest(requestId).getCode() != null) {
-            getCodeDeferredResult.setResult(getExecutableRequest(requestId).getCode());
-        }
-        return true;
-
-    }
-
-    @Override
-    public boolean removeGetCodeDeferredResult(long requestId) {
-        if (REQUEST_CODE_MAP.containsKey(requestId)) {
-            REQUEST_CODE_MAP.remove(requestId);
-            return true;
+            request.setStatus(Request.STATUS.WAIT_CODE);
         } else {
-            return false;
+            User user = (User) userService.loadUserByUsername(username);
+            //create plus transaction:
+            Transaction transaction = new Transaction();
+            transaction.setUser(user);
+            transaction.setChange_value(-request.getTransaction().get(0).getChange_value());
+            transactionService.save(transaction);
+            request.addTransaction(transaction);
+            request.setStatus(Request.STATUS.NUMBER_REJECT);
         }
+        requestExecutionPool.updateRequest(request);
+        return true;
     }
+
 
     @Override
     public boolean setRequestCode(long id, String code) {
-        //check if Request exist:
-        if (getExecutableRequest(id) == null) {
+        LOG.info("set code for request id=" + id);
+        Request request = requestExecutionPool.getRequestById(id);
+        if (request == null) {
             return false;
         }
-        //set number to request:
-        getExecutableRequest(id).setCode(code);
+        //set code to request:
+        request.setCode(code);
         //set status:
-        getExecutableRequest(id).setStatus(Request.STATUS.COMPLETED);
-        //update request in db:
-        requestDAO.updateRequest(getExecutableRequest(id));
-        //if smbd already waits for this number:
-        if (REQUEST_CODE_MAP.containsKey(id)) {
-            REQUEST_CODE_MAP.get(id).setResult(code);
-        }
+        request.setStatus(Request.STATUS.COMPLETED);
+        //update in pool:
+        requestExecutionPool.updateRequest(request);
+        return true;
+    }
+
+    @Override
+    public boolean finishRequest(long requestId) {
+        Request finishedRequest = requestExecutionPool.getRequestById(requestId);
+        finishedRequest.setFinished(new Date(System.currentTimeMillis()));
+        finishedRequest.setExpired(true);
+        //update in pool:
+        requestExecutionPool.updateRequest(finishedRequest);
+        requestExecutionPool.removeRequest(requestId);
         return true;
     }
 }

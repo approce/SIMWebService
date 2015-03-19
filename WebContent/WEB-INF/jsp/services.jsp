@@ -5,7 +5,6 @@
 <!DOCTYPE html>
 <html ng-app="myApp">
 <head>
-
     <jsp:include page="fragments/staticHead.jsp"/>
 </head>
 <body>

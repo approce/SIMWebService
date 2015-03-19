@@ -38,13 +38,13 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Request getRequest(int id) {
+    public Request getRequest(long id) {
         return requestDAO.getRequest(id);
     }
 
     @Override
     public List<Request> getRequestListByUsername(String username) {
-        return requestDAO.getRequestListByUsername(username);
+        return requestDAO.getExecutableUserRequests(username);
     }
 
 

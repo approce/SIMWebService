@@ -1,22 +1,27 @@
 app.controller('requestsController', ['$scope', '$http', function ($scope, $http) {
     $scope.requests;
+    $scope.proposes;
     //init requests:
     $http.get("getRequests").
         success(function (data) {
             $scope.requests = data;
             //kostil:
-            //for each request (if status == wait4number):
             for (var i = 0; i < $scope.requests.length; i++) {
                 console.log($scope.requests[i].status);
-                if ($scope.requests[i].status == "WAIT_FOR_NUMBER") {
+                if ($scope.requests[i].status == "WAIT_NUMBER") {
                     //start long polling:
                     $scope.getRequestNumber($scope.requests[i]);
                 }
-                if ($scope.requests[i].status == "WAIT_FOR_CODE") {
+                if ($scope.requests[i].status == "WAIT_CODE") {
                     //start long polling for get code:
                     $scope.getRequestCode($scope.requests[i]);
                 }
             }
+        });
+    //init proposes:
+    $http.get("getServices")
+        .success(function (data) {
+            $scope.proposes = data;
         });
 
     //refresh requests:
@@ -32,14 +37,12 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
             .success(function (data, status, headers, config) {
                 if (data.success == true) {
                     //set new status to request view:
-                    request.status = "WAIT_FOR_NUMBER";
+                    request.status = "WAIT_NUMBER";
                     $scope.getRequestNumber(request);
                 } else {
                     //show error:
                     //break;
                 }
-                //send long polling request for number:
-
             });
     };
     //long polling ajax to get Number:
@@ -54,7 +57,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
                 } else {
                     //if number receivedd:
                     request.number = data;
-                    request.status = "WAIT_FOR_NUMBER_SUBMIT";
+                    request.status = "NUMBER_SUBMIT";
                     console.log("received " + data);
                 }
             });
@@ -67,12 +70,12 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
                 console.log(data);
             });
 
-        if (submit = true) {
-            request.status = "WAIT_FOR_CODE";
+        if (submit == true) {
+            request.status = "WAIT_CODE";
             //send ajax to get code:
             $scope.getRequestCode(request);
         } else {
-            request.status = "NUMBER_DISMISS";
+            request.status = "NUMBER_REJECT";
         }
     };
 
@@ -91,14 +94,46 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
                     console.log("received " + data);
                 }
             });
+    };
+
+    $scope.finishRequest = function (request) {
+        console.log('finishing request ' + request.id);
+        $http.get("setFinishRequest?requestId=" + request.id, request)
+            .success(function (data) {
+                if (data == "OK") {
+                    $scope.requests.splice($scope.requests.indexOf(request), 1);
+                    $scope.$apply();
+                }
+            });
+    };
+
+    $scope.createRequest = function (propose) {
+        console.log('createRequest ' + propose.id);
+        //send request to add request:
+        $.get("addRequest?serviceId=" + propose.id, function (data) {
+            if (data.success == true) {
+                //create request object:
+                var newRequest = {
+                    id: data.id,
+                    serviceName: propose.fullName,
+                    iconPath: propose.iconPath,
+                    status: "STOP",
+                    number: 0,
+                    code: null
+                };
+                // add to requests:
+                $scope.requests.push(newRequest);
+                $scope.$apply();
+            }
+        });
+    };
+
+    $scope.removeRequest = function (request) {
+        $.get("removeRequest?id=" + request.id, function (data) {
+            if (data.success == true) {
+                $scope.requests.splice($scope.requests.indexOf(request), 1);
+                $scope.$apply();
+            }
+        })
     }
-
-
 }]);
-
-
-/*$scope.requests = [{"id": "1233", "service": "Vkontakte", "status": "Preparing", "number": "0", "code": "0"},
- {"id": "1343", "service": "Odnoklassniki", "status": "Wait4Number", "number": "0", "code": "0"},
- {"id": "1343", "service": "Mamba", "status": "Wait4NumberSubmit", "number": "+380667692065", "code": "0"},
- {"id": "1343", "service": "Steam", "status": "Wait4Code", "number": "+380667692065", "code": "0"},
- {"id": "1343", "service": "Steam", "status": "Completed", "number": "+380667692065", "code": "8547"}];*/

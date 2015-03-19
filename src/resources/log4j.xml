@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration PUBLIC
+        "-//APACHE//DTD LOG4J 1.2//EN"
+        "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{HH:mm:ss:sss} %-5p %c{1}:%M - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="file" class="org.apache.log4j.RollingFileAppender">
+        <param name="file" value="C:/logs/SIMWeb.log"/>
+        <param name="MaxFileSize" value="10MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss:sss} %-5p %c{1}:%M - %m%n"/>
+        </layout>
+    </appender>
+
+    <!-- all info from all custom classes: appended to file-->
+    <logger name="com">
+        <level value="all"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+    <!-- debug mode appended to console-->
+    <root>
+        <priority value="WARN"/>
+        <appender-ref ref="console"/>
+    </root>
+
+</log4j:configuration>

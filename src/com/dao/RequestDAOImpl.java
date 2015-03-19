@@ -1,7 +1,9 @@
 package com.dao;
 
 import com.model.Request;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -40,20 +42,73 @@ public class RequestDAOImpl extends HibernateDaoSupport implements RequestDAO {
     }
 
     @Override
+    @Transactional
+    public void removeRequest(Request request) {
+        getHibernateTemplate().delete(request);
+    }
+
+
+    @Override
     @Transactional(readOnly = true)
-    public Request getRequest(int id) {
+    public Request getRequest(long id) {
         return getHibernateTemplate().load(Request.class, id);
     }
 
     @Override
+    @Transactional
+    public List<Request> getUserRequests(String username, int limit, int offset, String order) {
+        String query = "From Request ";
+        query += " where user.username=? ";
+        if (order != null) {
+            query += order;
+        }
+
+        Query q = getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(query);
+        q.setParameter(0, username);
+        q.setFirstResult(offset);
+        q.setMaxResults(limit);
+        return (List<Request>) q.list();
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public List<Request> getRequestListByUsername(String username) {
+    public List<Request> getExecutableUserRequests(String username) {
+        //return non expired requests by user
         return (List<Request>) getHibernateTemplate()
-                .find("From Request as request where request.user.username=?", username);
+                .find("From Request as request where request.user.username=? and expired=0", username);
     }
 
     @Override
     public List<Request> getExecutableRequests() {
-        return (List<Request>) getHibernateTemplate().find("From Request where expired=0 and status!='STOP'");
+        //return from DB all requests which are not expired:
+        return (List<Request>) getHibernateTemplate().find("From Request where expired=0");
+    }
+
+    @Override
+    @Transactional
+    public List<Request> getAllRequest(int limit, int offset, String order) {
+        String query = "From Request ";
+        if (order != null) {
+            query += order;
+        }
+        Query q = getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(query);
+        q.setFirstResult(offset);
+        q.setMaxResults(limit);
+        return (List<Request>) q.list();
+    }
+
+    @Override
+    @Transactional
+    public long getRequestRowCount() {
+        return (long) getSessionFactory().getCurrentSession().createCriteria(Request.class)
+                .setProjection(Projections.rowCount()).uniqueResult();
+    }
+
+    @Override
+    @Transactional
+    public long getUserRequestsRowCount(String username) {
+        return (Long) getSessionFactory().getCurrentSession().createQuery("select count(*) from Request where user.username=?")
+                .setParameter(0, username)
+                .uniqueResult();
     }
 }

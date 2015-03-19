@@ -6,7 +6,7 @@
     <!-- spring config -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:\spring\SpringXMLConfig.xml</param-value>
+        <param-value>classpath:\spring\application-context.xml</param-value>
     </context-param>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -21,7 +21,7 @@
         </servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:\spring\SpringXMLConfig.xml</param-value>
+            <param-value>classpath:\spring\dispatcher-context.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
         <async-supported>true</async-supported>

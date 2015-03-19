@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class UserServiceImpl implements UserService {
         List<Role> roles = new LinkedList<Role>();
         roles.add(Role.getRole(Role.UserRole.USER));
         user.setRoles(roles);
+        //set current date of registration:
+        user.setCalendar(Calendar.getInstance());
         userDAO.saveUser(user);
     }
 

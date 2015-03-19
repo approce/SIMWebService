@@ -3,9 +3,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-
-
-
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- налаштування управління транзакцій з допомогою анотації @Transactional -->
@@ -42,9 +39,13 @@
                 <prop key="hibernate.connection.charSet">UTF-8</prop>
                 <prop key="connection.characterEncoding">UTF-8</prop>
                 <prop key="hibernate.connection.Useunicode">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+                <prop key="hibernate.hbm2ddl.import_files">
+                    hibernate/fill.sql,hibernate/requests.sql,hibernate/transactions.sql,hibernate/transactionsMap.sql
+                </prop>
                 <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
             </props>
         </property>
     </bean>
+
 </beans>
