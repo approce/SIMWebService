@@ -18,12 +18,16 @@ public class Propose {
 
     @Column(name = "shortName")
     private String shortName;
+
     @Column(name = "fullName")
     private String fullName;
+
     @Column(name = "price")
     private float price;
+
     @Column(name = "iconPath")
     private String iconPath;
+
     @Column(name = "description")
     private String description;
 
