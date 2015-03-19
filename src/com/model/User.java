@@ -23,6 +23,21 @@ import java.util.List;
 @Table(name = "User")
 public class User implements UserDetails {
 
+    public static enum UserRole {
+
+        USER(1, "ROLE_USER"),
+        ADMIN(2, "ROLE_ADMIN");
+
+        private int id;
+        private String name;
+
+        UserRole(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -40,10 +55,9 @@ public class User implements UserDetails {
     @NotEmpty
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role")
-    @NotEmpty
-    private List<Role> roles;
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @OneToMany(mappedBy = "user")
     private List<Request> request;
@@ -89,12 +103,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public UserRole getRole() {
+        return role;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     public List<Request> getRequest() {
@@ -132,10 +146,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        LinkedList<GrantedAuthority> linkedList = new LinkedList<GrantedAuthority>();
-        for (Role r : roles) {
-            linkedList.add(new SimpleGrantedAuthority(r.getRole()));
-        }
+        LinkedList<GrantedAuthority> linkedList = new LinkedList<>();
+        linkedList.add(new SimpleGrantedAuthority(role.name));
         return linkedList;
     }
 

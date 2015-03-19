@@ -45,7 +45,6 @@ public class Request {
     @Column(name = "code")
     private String code;
 
-
     @Column(name = "started")
     private Date started;
 

@@ -6,7 +6,6 @@
 package com.service;
 
 import com.dao.UserDAO;
-import com.model.Role;
 import com.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
 
 @Service(value = "UserService")
 public class UserServiceImpl implements UserService {
@@ -30,9 +27,7 @@ public class UserServiceImpl implements UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
         //user creates only with role "User":
-        List<Role> roles = new LinkedList<Role>();
-        roles.add(Role.getRole(Role.UserRole.USER));
-        user.setRoles(roles);
+        user.setRole(User.UserRole.USER);
         //set current date of registration:
         user.setCalendar(Calendar.getInstance());
         userDAO.saveUser(user);
