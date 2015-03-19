@@ -54,25 +54,10 @@ public class AdminUsers {
             @RequestParam(value = "sort", required = false) String sort,
             @RequestParam(value = "order", required = false) String order) {
 
-        String sqlOrder = null;
-        if (sort != null) {
-            sqlOrder = "order by";
-            if (sort.equals("service")) {
-                sqlOrder += " propose.fullName";
-            } else if (sort.equals("started")) {
-                sqlOrder += " started";
-            } else if (sort.equals("status")) {
-                sqlOrder += " status";
-            }
-            if (order.equals("desc")) {
-                sqlOrder += " DESC";
-            }
-        }
-
         PaginatedResult result = new PaginatedResult();
         result.setTotal(requestDAO.getUserRequestsRowCount(username));
 
-        for (final Request request : requestDAO.getUserRequests(username, limit, offset, sqlOrder)) {
+        for (final Request request : requestDAO.getRequests(limit, offset, sort, order, username)) {
             result.getRows().add(new LinkedHashMap<String, Object>() {
                 {
                     put("id", request.getId());

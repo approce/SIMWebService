@@ -4,21 +4,19 @@ import com.dao.ProposeDAO;
 import com.dao.RequestDAO;
 import com.model.Request;
 import com.model.Transaction;
+import com.utils.PaginatedResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
-import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 @Controller
+@RequestMapping("/profile")
 public class Profile {
 
     @Autowired
@@ -27,45 +25,51 @@ public class Profile {
     @Autowired
     private ProposeDAO proposeDAO;
 
-    @RequestMapping(value = "requests", method = RequestMethod.GET)
+    @RequestMapping(value = "/requests")
     public String profile(Model model) {
         //set proposes:
+        //TODO delete this and get proposed from UI:
         model.addAttribute("proposes", proposeDAO.getProposes());
         return "requests";
     }
 
-    @RequestMapping(value = "history", method = RequestMethod.GET)
+    @RequestMapping(value = "history")
     public String history() {
         return "history";
     }
 
-    @RequestMapping(value = "requestHistory", method = RequestMethod.GET)
+
+    @RequestMapping(value = "history/show")
     @ResponseBody
-    public List<Map<String, Object>> requestHistory(Principal principal) {
-        //TODO pagination for request history:
-        List<Request> requests = null;
-        //requestDAO.getUserRequests(principal.getName(),0, 0, 0);
-        List<Map<String, Object>> result = new LinkedList<>();
-        for (Request r : requests) {
-            Map<String, Object> row = new LinkedHashMap<>();
-            row.put("id", r.getId());
-            row.put("service", r.getPropose().getFullName());
-            //get sum of transactions:
-            float sum = 0;
-            for (Transaction t : r.getTransaction()) {
-                sum -= t.getChange_value();
-            }
-            row.put("price", sum);
-            row.put("status", r.getStatus());
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yy hh:mm");
-            if (r.getStarted() != null) {
-                row.put("started", sdf.format(r.getStarted()));
-            }
-            row.put("number", r.getNumber());
-            row.put("code", r.getCode());
-            result.add(row);
+    public PaginatedResult requestsHistory(@RequestParam(value = "limit") int limit,
+                                           @RequestParam(value = "offset") int offset,
+                                           @RequestParam(value = "sort", required = false) String sort,
+                                           @RequestParam(value = "order", required = false) String order,
+                                           Principal principal) {
+        PaginatedResult result = new PaginatedResult();
+
+        result.setTotal(requestDAO.getUserRequestsRowCount(principal.getName()));
+
+        for (final Request request : requestDAO.getRequests(limit, offset, sort, order, principal.getName())) {
+            result.getRows().add(new LinkedHashMap<String, Object>() {
+                {
+                    put("id", request.getId());
+                    put("service", request.getPropose().getFullName());
+                    put("username", request.getUser().getUsername());
+                    put("started", request.getStarted());
+                    put("status", request.getStatus());
+
+                    //get sum of transactions:
+                    float sum = 0;
+                    for (Transaction t : request.getTransaction()) {
+                        sum -= t.getChange_value();
+                    }
+                    put("price", sum);
+                    put("number", request.getNumber());
+                    put("code", request.getCode());
+                }
+            });
         }
         return result;
     }
-
 }

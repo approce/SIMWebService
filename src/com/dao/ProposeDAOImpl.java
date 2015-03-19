@@ -38,9 +38,4 @@ public class ProposeDAOImpl extends HibernateDaoSupport implements ProposeDAO {
         List<Propose> result = (List<Propose>) getHibernateTemplate().find("from Propose where id=?", id);
         return result.size() == 0 ? null : result.get(0);
     }
-
-    @Override
-    public void setProposes(List<Propose> list) {
-    }
-
 }

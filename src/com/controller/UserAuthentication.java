@@ -78,7 +78,7 @@ public class UserAuthentication {
         if (!matches) {
             //if username validation fails:
             json.put("invalid", true);
-        } else if (userService.isUserName(username)) {
+        } else if (userService.usernameExist(username)) {
             //1. Check if username already exist:
             //if exist:
             json.put("exist", true);

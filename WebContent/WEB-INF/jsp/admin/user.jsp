@@ -70,7 +70,7 @@
                         <div class="form-group">
                             <label class="control-label">registration:</label>
                             <label> <fmt:formatDate pattern="yyyy-MM-dd hh:mm"
-                                                    value="${user.calendar.time}"/></label>
+                                                    value="${user.registered.time}"/></label>
                         </div>
 
                         <div class="form-group">

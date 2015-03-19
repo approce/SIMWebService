@@ -47,43 +47,15 @@ public class AdminRequests {
 
     @RequestMapping(value = "admin/requests/all")
     @ResponseBody
-    public Object allRequests(@RequestParam(value = "limit") int limit,
-                              @RequestParam(value = "offset") int offset,
-                              @RequestParam(value = "sort", required = false) String sort,
-                              @RequestParam(value = "order", required = false) String order,
-                              @RequestParam(value = "search", required = false) String search) {
-
-
-        String sqlOrder = null;
-        if (sort != null) {
-            sqlOrder = "order by";
-            if (sort.equals("id")) {
-                sqlOrder += " id";
-            } else if (sort.equals("username")) {
-                sqlOrder += " user.username";
-            } else if (sort.equals("service")) {
-                sqlOrder += " propose.fullName";
-            } else if (sort.equals("started")) {
-                sqlOrder += " started";
-            } else if (sort.equals("status")) {
-                sqlOrder += " status";
-            }
-            if (order.equals("desc")) {
-                sqlOrder += " DESC";
-            }
-        }
-        if (search != null) {
-            if (sqlOrder == null) {
-                sqlOrder = new String();
-            }
-            sqlOrder += "WHERE user.username LIKE '%" + search + "%'";
-        }
-
-
+    public PaginatedResult allRequests(@RequestParam(value = "limit") int limit,
+                                       @RequestParam(value = "offset") int offset,
+                                       @RequestParam(value = "sort", required = false) String sort,
+                                       @RequestParam(value = "order", required = false) String order,
+                                       @RequestParam(value = "search", required = false) String search) {
         PaginatedResult result = new PaginatedResult();
         result.setTotal(requestDAO.getRequestRowCount());
 
-        for (final Request request : requestDAO.getAllRequest(limit, offset, sqlOrder)) {
+        for (final Request request : requestDAO.getRequests(limit, offset, sort, order, null)) {
             result.getRows().add(new LinkedHashMap<String, Object>() {
                 {
                     put("id", request.getId());

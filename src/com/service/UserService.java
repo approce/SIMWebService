@@ -6,7 +6,9 @@
 package com.service;
 
 import com.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * @author Роман
@@ -16,8 +18,8 @@ public interface UserService extends UserDetailsService {
 
     void createUser(User u);
 
-    void saveUser(User u);
+    boolean usernameExist(String username);
 
-    boolean isUserName(String username);
-
+    @Override
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 }

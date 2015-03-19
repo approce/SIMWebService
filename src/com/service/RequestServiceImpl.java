@@ -33,11 +33,6 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void mergeRequest(Request request) {
-        requestDAO.mergeRequest(request);
-    }
-
-    @Override
     public Request getRequest(long id) {
         return requestDAO.getRequest(id);
     }

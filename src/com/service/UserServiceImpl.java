@@ -27,21 +27,15 @@ public class UserServiceImpl implements UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
         //user creates only with role "User":
-        user.setRole(User.UserRole.USER);
+        user.setRole(User.UserRole.ROLE_USER);
         //set current date of registration:
-        user.setCalendar(Calendar.getInstance());
-        userDAO.saveUser(user);
-    }
-
-
-    @Override
-    public void saveUser(User user) {
+        user.setRegistered(Calendar.getInstance());
         userDAO.saveUser(user);
     }
 
     @Override
-    public boolean isUserName(String username) {
-        return userDAO.isUserName(username);
+    public boolean usernameExist(String username) {
+        return userDAO.usernameExist(username);
     }
 
 

@@ -66,7 +66,7 @@ public class UserValidator implements Validator {
         if ((user.getPassword() == null) || user.getPassword().length() < 6 || user.getUsername().length() > 20) {
             errors.rejectValue("password", "Size password");
         }
-        if (userService.isUserName(user.getUsername())) {
+        if (userService.usernameExist(user.getUsername())) {
             errors.rejectValue("username", "Username.alreadyExist");
         }
     }
