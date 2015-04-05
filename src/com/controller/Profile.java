@@ -42,6 +42,7 @@ public class Profile {
     @RequestMapping(value = "requests/executable", params = "data")
     @ResponseBody
     public List<Map<String, Object>> getRequests(Principal principal) {
+        System.out.println("i am hre");
         List<Map<String, Object>> result = new LinkedList<>();
         List<Request> requests = requestService.getRequestListByUsername(principal.getName());
         for (final Request request : requests) {

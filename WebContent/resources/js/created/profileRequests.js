@@ -2,7 +2,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
     $scope.requests;
     $scope.proposes;
     //init requests:
-    $http.get("getRequests").
+    $http.get("executable?data").
         success(function (data) {
             $scope.requests = data;
             //kostil:
@@ -19,7 +19,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
             }
         });
     //init proposes:
-    $http.get("getServices")
+    $http.get("/getServices")
         .success(function (data) {
             $scope.proposes = data;
         });
@@ -33,7 +33,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
     };
 
     $scope.startRequest = function (request) {
-        $http.get("startRequest?id=" + request.id, request)
+        $http.get("/startRequest?id=" + request.id, request)
             .success(function (data, status, headers, config) {
                 if (data.success == true) {
                     //set new status to request view:
@@ -48,7 +48,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
     //long polling ajax to get Number:
     $scope.getRequestNumber = function (request) {
         console.log("start polling " + request.id);
-        $http.get("getRequestNumber?id=" + request.id, request)
+        $http.get("/getRequestNumber?id=" + request.id, request)
             .success(function (data) {
                 if (data == "timeOut") {
                     console.log("received timeOut");
@@ -65,7 +65,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
     //user submit number ajax:
     $scope.submitNumber = function (request, submit) {
         console.log("submit request " + request.id + " " + submit);
-        $http.get("submitRequestNumber?id=" + request.id + "&submit=" + submit)
+        $http.get("/submitRequestNumber?id=" + request.id + "&submit=" + submit)
             .success(function (data) {
                 console.log(data);
             });
@@ -81,7 +81,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
 
     $scope.getRequestCode = function (request) {
         console.log('start get code for request ' + request.id);
-        $http.get("getRequestCode?id=" + request.id, request)
+        $http.get("/getRequestCode?id=" + request.id, request)
             .success(function (data) {
                 if (data == "timeOut") {
                     console.log("received timeOut");
@@ -98,7 +98,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
 
     $scope.finishRequest = function (request) {
         console.log('finishing request ' + request.id);
-        $http.get("setFinishRequest?requestId=" + request.id, request)
+        $http.get("/setFinishRequest?requestId=" + request.id, request)
             .success(function (data) {
                 if (data == "OK") {
                     $scope.requests.splice($scope.requests.indexOf(request), 1);
@@ -110,7 +110,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
     $scope.createRequest = function (propose) {
         console.log('createRequest ' + propose.id);
         //send request to add request:
-        $.get("addRequest?serviceId=" + propose.id, function (data) {
+        $.get("/addRequest?serviceId=" + propose.id, function (data) {
             if (data.success == true) {
                 //create request object:
                 var newRequest = {
@@ -129,7 +129,7 @@ app.controller('requestsController', ['$scope', '$http', function ($scope, $http
     };
 
     $scope.removeRequest = function (request) {
-        $.get("removeRequest?id=" + request.id, function (data) {
+        $.get("/removeRequest?id=" + request.id, function (data) {
             if (data.success == true) {
                 $scope.requests.splice($scope.requests.indexOf(request), 1);
                 $scope.$apply();

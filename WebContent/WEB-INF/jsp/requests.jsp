@@ -7,11 +7,11 @@
 <head>
     <jsp:include page="fragments/staticHead.jsp"/>
     <%-- my css --%>
-    <link rel="stylesheet" href="resources/css/userRequests.css">
+    <link rel="stylesheet" href="/resources/css/userRequests.css">
     <%-- busy progress bar: --%>
-    <link rel="stylesheet" href="resources/css/busyInput.css">
+    <link rel="stylesheet" href="/resources/css/busyInput.css">
     <%-- angular requests script --%>
-    <script src="resources/js/created/profileRequests.js"></script>
+    <script src="/resources/js/created/profileRequests.js"></script>
     <%-- angular --%>
 </head>
 <body ng-app="myApp">
@@ -36,7 +36,7 @@
                 <div id="accordion" class="collapse panel panel-default" style="padding: 10px 5px 15px 5px">
                     <ul class="form-group" style="list-style-type: none">
                         <li class="col-sm-8" ng-repeat="propose in proposes">
-                            <img class="serviceImage" src="resources/images/{{propose.iconPath}}" height="20"
+                            <img class="serviceImage" src="/resources/images/{{propose.iconPath}}" height="20"
                                  width="20"/>
                             <label class="serviceTitle" ng-click="createRequest(propose)"
                                    style="cursor: pointer">{{propose.fullName}}</label>

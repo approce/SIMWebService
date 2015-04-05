@@ -4,7 +4,7 @@
     <div class="header row">
         <%-- service name --%>
         <div class="serviceTitle col-lg-6 col-sm-6 col-xs-6" style="min-width:150px;padding: 0px">
-            <img class="serviceImage" src="resources/images/{{request.iconPath}}" height="20"
+            <img class="serviceImage" src="/resources/images/{{request.iconPath}}" height="20"
                  width="20">
             <label>{{request.serviceName}}</label>
         </div>
