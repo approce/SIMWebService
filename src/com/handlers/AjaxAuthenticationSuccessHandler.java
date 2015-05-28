@@ -22,6 +22,6 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
                                         HttpServletResponse response, Authentication auth)
             throws IOException, ServletException {
         //on success sign in: redirect to services:
-        response.sendRedirect("services");
+        response.sendRedirect("/");
     }
 }

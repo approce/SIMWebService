@@ -14,33 +14,36 @@
     </div>
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
+
+        </ul>
+        <ul class="nav navbar-right navbar-nav" style="margin-right: 10px">
             <security:authorize access="!isAuthenticated()">
                 <li><a href="#" data-toggle="modal" data-target="#loginModal">Login</a></li>
             </security:authorize>
 
             <security:authorize access="isAuthenticated()">
-                <li><a href="requests">My profile</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="glyphicon glyphicon-user"></i>
+                            <security:authentication property="principal.username"/>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/profile/requests/executable">
+                                <i class="glyphicon glyphicon-user"></i> Profile</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="glyphicon glyphicon-cog"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="/logout.do"><i class="glyphicon glyphicon-off"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </li>
             </security:authorize>
 
-        </ul>
-        <ul class="nav navbar-right navbar-nav" style="margin-right: 10px">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> John
-                    Smith <b
-                            class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#"><i class="glyphicon glyphicon-user"></i> Profile</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="glyphicon glyphicon-cog"></i> Settings</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#"><i class="glyphicon glyphicon-off"></i> Log Out</a>
-                    </li>
-                </ul>
-            </li>
         </ul>
     </div>
     <c:if test="${not empty adminSlidePanel}">
@@ -97,7 +100,8 @@
                     <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Forms</a>
                 </li>
                 <li>
-                    <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
+                    <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap
+                        Elements</a>
                 </li>
                 <li>
                     <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>

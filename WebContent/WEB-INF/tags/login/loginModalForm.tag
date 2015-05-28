@@ -21,11 +21,6 @@
                     <input name="password" ng-model="password" class="form-control" placeholder="Password"
                            type="password" required>
                 </form>
-                <div class="checkbox" style="display:inline">
-                    <label style="padding-top: 5px">
-                        <input type="checkbox" value="remember-me"> Remember me
-                    </label>
-                </div>
                 <button type="button" ladda="isLoading" data-style="zoom-in" ng-click="doLogin()"
                         class="btn btn-primary pull-right" style="display:inline;">Submit
                 </button>
