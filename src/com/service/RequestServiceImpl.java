@@ -17,7 +17,7 @@ public class RequestServiceImpl implements RequestService {
     private UserService userService;
 
     @Autowired
-    private ProposeService proposeService;
+    private OfferService offerService;
 
     @Autowired
     private RequestDAO requestDAO;

@@ -5,16 +5,16 @@
  */
 package com.dao;
 
-import com.model.Propose;
+import com.model.Offer;
 
 import java.util.List;
 
 /**
  * @author Роман
  */
-public interface ProposeDAO {
+public interface OfferDAO {
 
-    List<Propose> getProposes();
+    List<Offer> getProposes();
 
-    Propose getPropose(int id);
+    Offer getPropose(int id);
 }

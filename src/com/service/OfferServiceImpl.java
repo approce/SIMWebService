@@ -5,8 +5,8 @@
  */
 package com.service;
 
-import com.dao.ProposeDAO;
-import com.model.Propose;
+import com.dao.OfferDAO;
+import com.model.Offer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +16,23 @@ import java.util.List;
  * @author Роман
  */
 @Service(value = "ProposeService")
-public class ProposeServiceImpl implements ProposeService {
+public class OfferServiceImpl implements OfferService {
 
     @Autowired
-    private ProposeDAO proposeDAO;
+    private OfferDAO offerDAO;
 
     @Override
-    public List<Propose> getProposes() {
-        return proposeDAO.getProposes();
+    public List<Offer> getProposes() {
+        return offerDAO.getProposes();
     }
 
     @Override
-    public Propose getPropose(int id) {
-        return proposeDAO.getPropose(id);
+    public Offer getPropose(int id) {
+        return offerDAO.getPropose(id);
     }
 
     @Override
-    public void setProposes(List<Propose> list) {
+    public void setProposes(List<Offer> list) {
 
     }
 

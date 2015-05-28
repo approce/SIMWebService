@@ -5,19 +5,19 @@
  */
 package com.service;
 
-import com.model.Propose;
+import com.model.Offer;
 
 import java.util.List;
 
 /**
  * @author Роман
  */
-public interface ProposeService {
+public interface OfferService {
 
-    List<Propose> getProposes();
+    List<Offer> getProposes();
 
-    Propose getPropose(int id);
+    Offer getPropose(int id);
 
-    void setProposes(List<Propose> list);
+    void setProposes(List<Offer> list);
 
 }

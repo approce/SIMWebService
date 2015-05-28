@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.dao.ProposeDAO;
+import com.dao.OfferDAO;
 import com.dao.RequestDAO;
 import com.model.Request;
 import com.service.RequestService;
@@ -26,7 +26,7 @@ public class Profile {
     private RequestDAO requestDAO;
 
     @Autowired
-    private ProposeDAO proposeDAO;
+    private OfferDAO offerDAO;
 
     @Autowired
     private RequestService requestService;
@@ -35,7 +35,7 @@ public class Profile {
     public String profile(Model model) {
         //set proposes:
         //TODO delete this and get proposed from UI:
-        model.addAttribute("proposes", proposeDAO.getProposes());
+        model.addAttribute("proposes", offerDAO.getProposes());
         return "requests";
     }
 
@@ -49,8 +49,8 @@ public class Profile {
             result.add(
                     new LinkedHashMap<String, Object>() {{
                         put("id", request.getId());
-                        put("serviceName", request.getPropose().getFullName());
-                        put("iconPath", request.getPropose().getIconPath());
+                        put("serviceName", request.getOffer().getFullName());
+                        put("iconPath", request.getOffer().getIconPath());
                         put("status", request.getStatus());
                         put("number", request.getNumber());
                         put("code", request.getCode());
@@ -78,7 +78,7 @@ public class Profile {
             result.getRows().add(new LinkedHashMap<String, Object>() {
                 {
                     put("id", request.getId());
-                    put("service", request.getPropose().getFullName());
+                    put("service", request.getOffer().getFullName());
                     put("username", request.getUser().getUsername());
                     put("started", request.getStarted());
                     put("status", request.getStatus());

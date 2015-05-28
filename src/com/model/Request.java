@@ -32,8 +32,8 @@ public class Request {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "propose_id")
-    private Propose propose;
+    @JoinColumn(name = "offer_id")
+    private Offer offer;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -73,12 +73,12 @@ public class Request {
         this.user = user;
     }
 
-    public Propose getPropose() {
-        return propose;
+    public Offer getOffer() {
+        return offer;
     }
 
-    public void setPropose(Propose propose) {
-        this.propose = propose;
+    public void setOffer(Offer offer) {
+        this.offer = offer;
     }
 
     public STATUS getStatus() {

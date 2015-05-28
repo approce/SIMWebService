@@ -59,7 +59,7 @@ public class AdminRequests {
             result.getRows().add(new LinkedHashMap<String, Object>() {
                 {
                     put("id", request.getId());
-                    put("service", request.getPropose().getFullName());
+                    put("service", request.getOffer().getFullName());
                     put("username", request.getUser().getUsername());
                     put("started", request.getStarted());
                     put("status", request.getStatus());
@@ -85,7 +85,7 @@ public class AdminRequests {
             Map<String, Object> row = new LinkedHashMap<>();
             row.put("index", index);
             row.put("id", r.getId());
-            row.put("service", r.getPropose().getFullName());
+            row.put("service", r.getOffer().getFullName());
             row.put("username", r.getUser().getUsername());
             List<Float> transactions = new LinkedList<>();
             if (r.getTransaction() != null) {

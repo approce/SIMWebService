@@ -27,7 +27,7 @@ public class GSMServiceImpl implements GSMService {
         for (Request request : requestExecutionPool.getRequests()) {
             if (request.getStatus().equals(Request.STATUS.WAIT_NUMBER)) {
                 //TODO create priority for reuquest:
-                startGetRequestNumber(request.getId(), request.getPropose().getId(), 10);
+                startGetRequestNumber(request.getId(), request.getOffer().getId(), 10);
             }
             if (request.getStatus().equals(Request.STATUS.WAIT_CODE)) {
                 startGetRequestCode(request.getId());

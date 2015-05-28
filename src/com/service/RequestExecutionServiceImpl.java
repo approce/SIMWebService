@@ -41,13 +41,13 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
             throw new RequestNotExist();
         }
         //check if money is enought:
-        if (!(user.getBalance() >= request.getPropose().getPrice())) {
+        if (!(user.getBalance() >= request.getOffer().getPrice())) {
             throw new NotEnoughtUserBalance();
         }
         //create new transaction:
         Transaction transaction = new Transaction();
         transaction.setUser(user);
-        transaction.setChange_value(-request.getPropose().getPrice());
+        transaction.setChange_value(-request.getOffer().getPrice());
 
         //save transaction to db:
         transactionService.save(transaction);
@@ -56,7 +56,7 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
         request.addTransaction(transaction);
 
         //send request to gsm pool:
-        gsmService.startGetRequestNumber(request.getId(), request.getPropose().getId(), 10);
+        gsmService.startGetRequestNumber(request.getId(), request.getOffer().getId(), 10);
         //set request status:
         request.setStatus(Request.STATUS.WAIT_NUMBER);
         request.setStarted(new Date(System.currentTimeMillis()));

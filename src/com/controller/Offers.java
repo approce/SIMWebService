@@ -5,8 +5,8 @@
  */
 package com.controller;
 
-import com.model.Propose;
-import com.service.ProposeService;
+import com.model.Offer;
+import com.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,23 +19,23 @@ import java.util.List;
  * @author Роман
  */
 @Controller
-public class Proposes {
+public class Offers {
 
     @Autowired
-    private ProposeService proposeService;
+    private OfferService offerService;
 
     @RequestMapping(value = "/services")
     public String getProposesList(Model model) {
-        List<Propose> proposes = proposeService.getProposes();
-        model.addAttribute("services", proposes);
+        List<Offer> offers = offerService.getProposes();
+        model.addAttribute("services", offers);
         return "services";
     }
 
 
     @RequestMapping(value = "getServices")
     @ResponseBody
-    public List<Propose> getProposes() {
-        return proposeService.getProposes();
+    public List<Offer> getProposes() {
+        return offerService.getProposes();
     }
 
 }

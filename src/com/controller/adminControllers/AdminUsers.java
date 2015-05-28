@@ -61,7 +61,7 @@ public class AdminUsers {
             result.getRows().add(new LinkedHashMap<String, Object>() {
                 {
                     put("id", request.getId());
-                    put("service", request.getPropose().getFullName());
+                    put("service", request.getOffer().getFullName());
                     put("started", request.getStarted());
                     put("status", request.getStatus());
                     //get sum of transactions:

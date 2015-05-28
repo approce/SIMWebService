@@ -8,8 +8,8 @@ package com.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Propose")
-public class Propose {
+@Table(name = "offer")
+public class Offer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

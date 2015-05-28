@@ -1,10 +1,10 @@
 package com.controller;
 
 import com.dao.RequestDAO;
-import com.model.Propose;
+import com.model.Offer;
 import com.model.Request;
 import com.model.User;
-import com.service.ProposeService;
+import com.service.OfferService;
 import com.service.RequestService;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class RequestGeneralController {
     private UserService userService;
 
     @Autowired
-    private ProposeService proposeService;
+    private OfferService offerService;
 
     @Autowired
     private RequestService requestService;
@@ -43,12 +43,12 @@ public class RequestGeneralController {
         Request request = new Request();
         request.setStatus(Request.STATUS.STOP);
         request.setUser((User) userService.loadUserByUsername(principal.getName()));
-        Propose propose = proposeService.getPropose(proposeId);
-        if (propose == null) {
+        Offer offer = offerService.getPropose(proposeId);
+        if (offer == null) {
             result.put("success", false);
             result.put("error", "wrongService");
         }
-        request.setPropose(propose);
+        request.setOffer(offer);
         requestService.saveRequest(request);
         result.put("success", true);
         result.put("id", request.getId());
