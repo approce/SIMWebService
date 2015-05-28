@@ -9,7 +9,6 @@ import com.model.Offer;
 import com.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,14 +22,6 @@ public class Offers {
 
     @Autowired
     private OfferService offerService;
-
-    @RequestMapping(value = "/services")
-    public String getProposesList(Model model) {
-        List<Offer> offers = offerService.getOffers();
-        model.addAttribute("services", offers);
-        return "services";
-    }
-
 
     @RequestMapping(value = "getServices")
     @ResponseBody

@@ -10,12 +10,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" rel="home" href="services">SimService</a>
+        <a class="navbar-brand" rel="home" href="/">SimService</a>
     </div>
     <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-            <li><a href="/services">Services</a></li>
-
             <security:authorize access="!isAuthenticated()">
                 <li><a href="#" data-toggle="modal" data-target="#loginModal">Login</a></li>
             </security:authorize>

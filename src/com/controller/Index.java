@@ -5,19 +5,25 @@
  */
 package com.controller;
 
+import com.model.Offer;
+import com.service.OfferService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 public class Index {
 
-    @RequestMapping(value = "/")
-    public String in() {
-        return "index";
-    }
+    @Autowired
+    private OfferService offerService;
 
-    @RequestMapping(value = "/index")
-    public String index() {
+    @RequestMapping(value = "/")
+    public String offers(Model model) {
+        List<Offer> offers = offerService.getOffers();
+        model.addAttribute("services", offers);
         return "index";
     }
 

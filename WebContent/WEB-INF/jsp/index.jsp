@@ -1,22 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="myTag" uri="/tlds/ContestTags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
-<html>
+<html ng-app="myApp">
 <head>
     <jsp:include page="fragments/staticHead.jsp"/>
 </head>
 <body ng-app="myApp">
-<script type="text/javascript">
-    function dos() {
-        alert('2');
-    }
-    $(document).ready(function () {
-        var something = $('.servicePicker').each(function () {
-            this.style.cursor = 'pointer';
-            this.onclick = dos;
-        });
-    });
-</script>
+<script type="text/javascript" src="resources/js/created/services.js"></script>
 <jsp:include page="fragments/header.jsp"/>
 <div class="container">
     <div class="col-sm-20 col-sm-offset-2">
@@ -25,15 +17,17 @@
                 <label>Please, choose service</label>
             </div>
             <div class="panel-body">
-
+                <c:forEach items="${services}" var="service">
+                    <myTag:service id="${service.id}" fullName="${service.fullName}"
+                                   iconPath="${service.iconPath}" price="${service.price}"/>
+                </c:forEach>
             </div>
             <div class="panel-footer">
-                <label>There is no you Service?</label>
+                <label>There is no your Service?</label>
                 <button class="btn btn-primary btn-xs">Add service</button>
             </div>
         </div>
     </div>
 </div>
-<!-- /.container -->
 </body>
 </html>
