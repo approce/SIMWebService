@@ -2,9 +2,6 @@ package com.service;
 
 import org.springframework.web.context.request.async.DeferredResult;
 
-/**
- * Created by Роман on 22.02.2015.
- */
 public interface AsynchronousRequestPoolService {
     //set suspended getNumber thread for one of executable requests:
     boolean setGetNumberDeferredResult(long requestId, DeferredResult<Long> getNumberDeferredResult);
