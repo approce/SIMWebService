@@ -22,17 +22,17 @@ public class OfferServiceImpl implements OfferService {
     private OfferDAO offerDAO;
 
     @Override
-    public List<Offer> getProposes() {
+    public List<Offer> getOffers() {
         return offerDAO.getProposes();
     }
 
     @Override
-    public Offer getPropose(int id) {
+    public Offer getOffer(int id) {
         return offerDAO.getPropose(id);
     }
 
     @Override
-    public void setProposes(List<Offer> list) {
+    public void setOffers(List<Offer> list) {
 
     }
 

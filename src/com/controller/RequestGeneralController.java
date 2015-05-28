@@ -43,7 +43,7 @@ public class RequestGeneralController {
         Request request = new Request();
         request.setStatus(Request.STATUS.STOP);
         request.setUser((User) userService.loadUserByUsername(principal.getName()));
-        Offer offer = offerService.getPropose(proposeId);
+        Offer offer = offerService.getOffer(proposeId);
         if (offer == null) {
             result.put("success", false);
             result.put("error", "wrongService");

@@ -26,7 +26,7 @@ public class Offers {
 
     @RequestMapping(value = "/services")
     public String getProposesList(Model model) {
-        List<Offer> offers = offerService.getProposes();
+        List<Offer> offers = offerService.getOffers();
         model.addAttribute("services", offers);
         return "services";
     }
@@ -35,7 +35,7 @@ public class Offers {
     @RequestMapping(value = "getServices")
     @ResponseBody
     public List<Offer> getProposes() {
-        return offerService.getProposes();
+        return offerService.getOffers();
     }
 
 }

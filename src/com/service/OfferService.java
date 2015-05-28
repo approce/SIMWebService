@@ -14,10 +14,10 @@ import java.util.List;
  */
 public interface OfferService {
 
-    List<Offer> getProposes();
+    List<Offer> getOffers();
 
-    Offer getPropose(int id);
+    Offer getOffer(int id);
 
-    void setProposes(List<Offer> list);
+    void setOffers(List<Offer> list);
 
 }
