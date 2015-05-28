@@ -5,46 +5,34 @@
  */
 package com.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "offer")
+@Table(name = "offers")
 public class Offer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private int id;
+    @Column(name = "offer_id")
+    private String id;
 
-    @Column(name = "shortName")
-    private String shortName;
-
-    @Column(name = "fullName")
+    @Column(name = "full_name")
     private String fullName;
 
     @Column(name = "price")
     private float price;
 
-    @Column(name = "iconPath")
-    private String iconPath;
+    @Column(name = "originator")
+    private String originator;
 
-    @Column(name = "description")
-    private String description;
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
     }
 
     public String getFullName() {
@@ -63,19 +51,11 @@ public class Offer {
         this.price = price;
     }
 
-    public String getIconPath() {
-        return iconPath;
+    public String getOriginator() {
+        return originator;
     }
 
-    public void setIconPath(String iconPath) {
-        this.iconPath = iconPath;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setOriginator(String originator) {
+        this.originator = originator;
     }
 }

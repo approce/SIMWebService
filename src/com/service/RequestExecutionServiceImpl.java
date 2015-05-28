@@ -37,7 +37,7 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
         User user = (User) userService.loadUserByUsername(username);
         Request request = null;
         //check if request exist:
-        if ((request = user.getRequest(requestId)) == null) {
+        if ((request = user.getRequests(requestId)) == null) {
             throw new RequestNotExist();
         }
         //check if money is enought:
@@ -46,7 +46,7 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
         }
         //create new transaction:
         Transaction transaction = new Transaction();
-        transaction.setUser(user);
+        transaction.setRequest(request);
         transaction.setChange_value(-request.getOffer().getPrice());
 
         //save transaction to db:
@@ -96,7 +96,7 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
             User user = (User) userService.loadUserByUsername(username);
             //create plus transaction:
             Transaction transaction = new Transaction();
-            transaction.setUser(user);
+            transaction.setRequest(request);
             transaction.setChange_value(-request.getTransaction().get(0).getChange_value());
             transactionService.save(transaction);
             request.addTransaction(transaction);

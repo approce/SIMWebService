@@ -5,7 +5,7 @@ public interface GSMService {
 
     void init();
 
-    boolean startGetRequestNumber(long requestId, long proposeId, float priority);
+    boolean startGetRequestNumber(long requestId, String offerId, float priority);
 
     boolean submitRequestNumber(long requeistId, boolean submit);
 

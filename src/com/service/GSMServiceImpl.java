@@ -36,7 +36,7 @@ public class GSMServiceImpl implements GSMService {
     }
 
     @Override
-    public boolean startGetRequestNumber(final long requestId, long proposeId, float priority) {
+    public boolean startGetRequestNumber(final long requestId, String offerId, float priority) {
         //set Number after few seconds:
         new Thread() {
             public void run() {

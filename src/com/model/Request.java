@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "Request")
+@Table(name = "requests")
 public class Request {
 
     public static enum STATUS {
@@ -43,7 +43,7 @@ public class Request {
     private long number;
 
     @Column(name = "code")
-    private String code;
+    private String code; //TODO max 50
 
     @Column(name = "started")
     private Date started;
@@ -54,7 +54,7 @@ public class Request {
     @Column(name = "expired")
     private boolean expired;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "request")
     private List<Transaction> transaction;
 
     public long getId() {

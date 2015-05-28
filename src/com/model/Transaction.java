@@ -1,9 +1,17 @@
 package com.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "Transaction")
+@Table(name = "transactions")
 public class Transaction {
 
     @Id
@@ -12,8 +20,8 @@ public class Transaction {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "request_id")
+    private Request request;
 
     @Column(name = "change_value")
     private float change_value;
@@ -26,12 +34,16 @@ public class Transaction {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Request getRequest() {
+        return request;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setRequest(Request request) {
+        this.request = request;
+    }
+
+    public User getUser() {
+        return request.getUser();
     }
 
     public float getChange_value() {

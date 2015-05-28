@@ -50,7 +50,7 @@ public class Profile {
                     new LinkedHashMap<String, Object>() {{
                         put("id", request.getId());
                         put("serviceName", request.getOffer().getFullName());
-                        put("iconPath", request.getOffer().getIconPath());
+                        //TODO iconpath == id
                         put("status", request.getStatus());
                         put("number", request.getNumber());
                         put("code", request.getCode());

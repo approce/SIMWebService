@@ -120,7 +120,7 @@ public class AdminUsers {
                 put("id", u.getId());
                 put("username", u.getUsername());
                 put("balance", u.getBalance());
-                put("requests", u.getRequest().size());
+                put("requests", u.getRequests().size());
             }});
         }
         return result;

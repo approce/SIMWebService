@@ -16,11 +16,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * @author Роман
- */
 @Entity
-@Table(name = "User")
+@Table(name = "users")
 public class User implements UserDetails {
 
     public static enum UserRole {
@@ -30,16 +27,16 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private long id;
 
     @Column(name = "username")
     @NotEmpty
-    private String username;
+    private String username;  //TODO max 20
 
     @Column(name = "email")
     @NotEmpty
-    private String email;
+    private String email;                  //TODO max 60
 
     @Column(name = "password")
     @NotEmpty
@@ -47,16 +44,14 @@ public class User implements UserDetails {
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
+    @NotEmpty
     private UserRole role;
 
     @OneToMany(mappedBy = "user")
-    private List<Request> request;
+    private List<Request> requests;
 
     @Column(name = "balance")
     private float balance;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Transaction> transactions;
 
     @Column(name = "registered")
     private Calendar registered;
@@ -101,12 +96,12 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public List<Request> getRequest() {
-        return request;
+    public List<Request> getRequests() {
+        return requests;
     }
 
-    public Request getRequest(long id) {
-        for (Request r : getRequest()) {
+    public Request getRequests(long id) {
+        for (Request r : getRequests()) {
             if (r.getId() == id) {
                 return r;
             }
@@ -114,8 +109,8 @@ public class User implements UserDetails {
         return null;
     }
 
-    public void setRequest(List<Request> request) {
-        this.request = request;
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
     }
 
     public float getBalance() {
@@ -126,12 +121,12 @@ public class User implements UserDetails {
         this.balance = balance;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public Calendar getRegistered() {
+        return registered;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setRegistered(Calendar registered) {
+        this.registered = registered;
     }
 
     @Override
@@ -159,13 +154,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public Calendar getRegistered() {
-        return registered;
-    }
-
-    public void setRegistered(Calendar registered) {
-        this.registered = registered;
     }
 }
