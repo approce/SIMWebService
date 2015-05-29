@@ -16,9 +16,6 @@ import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Created by Роман on 18.02.2015.
- */
 @Controller
 public class RequestExecutionController {
     @Autowired
