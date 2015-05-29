@@ -19,11 +19,14 @@ public class TransactionDAOImpl extends HibernateDaoSupport implements Transacti
     @Transactional
     public void save(Transaction transaction) {
         getHibernateTemplate().saveOrUpdate(transaction);
-        //upadte user balance:
+        updateUserBalance(transaction);
+    }
+
+    private void updateUserBalance(Transaction transaction) {
         String hql = "UPDATE User SET balance=balance + :transaction where id=:id";
         getSessionFactory().getCurrentSession().createQuery(hql)
-                .setParameter("transaction", transaction.getChangeValue())
-                .setParameter("id", transaction.getUser().getId())
-                .executeUpdate();
+                           .setParameter("transaction", transaction.getChangeValue())
+                           .setParameter("id", transaction.getUser().getId())
+                           .executeUpdate();
     }
 }
