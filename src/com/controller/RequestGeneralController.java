@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Controller
 public class RequestGeneralController {
@@ -56,18 +54,13 @@ public class RequestGeneralController {
     @PreAuthorize(value = "isAuthenticated()")
     @RequestMapping(value = "removeRequest")
     @ResponseBody
-    public Map<String, Object> remove(@RequestParam(value = "id") long id) {
+    public ResponseEntity<String> remove(@RequestParam(value = "id") long id) {
         Request request = requestService.getRequest(id);
         if(request.getStatus().equals(Request.STATUS.STOP)) {
-            //only requests with status STOP can be removed:
             requestDAO.removeRequest(request);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        return new LinkedHashMap<String, Object>() {
-            {
-                put("success", true);
-            }
-        };
     }
-
 }
