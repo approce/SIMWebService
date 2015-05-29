@@ -27,9 +27,9 @@ public class RequestExecutionController {
     private static final long TIME_OUT_POLLING = 20000;
 
     @RequestMapping(value = "/startRequest", method = RequestMethod.GET)
-    public
+
     @ResponseBody
-    Map<String, Object> startRequest(Principal principal, @RequestParam(value = "id") long requestId) {
+    public Map<String, Object> startRequest(Principal principal, @RequestParam(value = "id") long requestId) {
         Map<String, Object> result = new LinkedHashMap<>();
         try {
             requestExecutionService.startRequest(principal.getName(), requestId);

@@ -4,9 +4,6 @@ import com.model.Request;
 
 import java.util.List;
 
-/**
- * Created by Роман on 10.02.2015.
- */
 public interface RequestDAO {
 
     void saveRequest(Request request);
