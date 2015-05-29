@@ -7,9 +7,6 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by Роман on 22.02.2015.
- */
 @Service("AsynchronousRequestPoolService")
 public class AsynchronousRequestPoolServiceImpl implements AsynchronousRequestPoolService {
 
