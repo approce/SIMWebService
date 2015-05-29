@@ -67,7 +67,7 @@ public class AdminUsers {
                     //get sum of transactions:
                     float sum = 0;
                     for (Transaction t : request.getTransaction()) {
-                        sum -= t.getChange_value();
+                        sum -= t.getChangeValue();
                     }
                     put("transactions", sum);
                 }

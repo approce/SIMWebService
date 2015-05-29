@@ -1,11 +1,11 @@
 package com.service;
 
+import com.model.Request;
 import com.model.Transaction;
 
-/**
- * Created by Роман on 15.02.2015.
- */
 public interface TransactionService {
 
-    void save(Transaction transaction);
+    Transaction withdrawForRequest(Request request);
+
+    Transaction drawBackForRequest(Request request);
 }

@@ -87,10 +87,10 @@ public class AdminRequests {
             row.put("id", r.getId());
             row.put("service", r.getOffer().getFullName());
             row.put("username", r.getUser().getUsername());
-            List<Float> transactions = new LinkedList<>();
+            List<Double> transactions = new LinkedList<>();
             if (r.getTransaction() != null) {
                 for (Transaction t : r.getTransaction()) {
-                    transactions.add(t.getChange_value());
+                    transactions.add(t.getChangeValue());
                 }
             }
             row.put("transactions", transactions);

@@ -133,10 +133,10 @@ public class Request {
         return transaction;
     }
 
-    public float getTransactionSum() {
+    public double getTransactionSum() {
         float sum = 0;
         for (Transaction t : this.getTransaction()) {
-            sum -= t.getChange_value();
+            sum -= t.getChangeValue();
         }
         return sum;
     }

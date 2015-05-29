@@ -11,10 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-/**
- * Created by Роман on 17.02.2015.
- */
-
 @Service(value = "RequestExecutionService")
 public class RequestExecutionServiceImpl implements RequestExecutionService {
 
@@ -33,24 +29,20 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
     private RequestExecutionPool requestExecutionPool;
 
     @Override
-    public boolean startRequest(String username, long requestId) throws RequestNotExist, NotEnoughtUserBalance {
+    public boolean startRequest(String username, long requestId)
+            throws RequestNotExist, NotEnoughtUserBalance {
         User user = (User) userService.loadUserByUsername(username);
         Request request = null;
         //check if request exist:
-        if ((request = user.getRequests(requestId)) == null) {
+        if((request = user.getRequests(requestId)) == null) {
             throw new RequestNotExist();
         }
         //check if money is enought:
-        if (!(user.getBalance() >= request.getOffer().getPrice())) {
+        if(!(user.getBalance() >= request.getOffer().getPrice())) {
             throw new NotEnoughtUserBalance();
         }
-        //create new transaction:
-        Transaction transaction = new Transaction();
-        transaction.setRequest(request);
-        transaction.setChange_value(-request.getOffer().getPrice());
 
-        //save transaction to db:
-        transactionService.save(transaction);
+        Transaction transaction = transactionService.withdrawForRequest(request);
 
         //save transaction to request:
         request.addTransaction(transaction);
@@ -70,7 +62,7 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
     public boolean setRequestNumber(long id, long number) {
         LOG.info("set number for request id=" + id);
         Request request = requestExecutionPool.getRequestById(id);
-        if (request == null) {
+        if(request == null) {
             return false;
         }
         //set number to request:
@@ -86,19 +78,15 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
     @Override
     public boolean userSubmitRequestNumber(String username, long id, boolean submit) {
         Request request = requestExecutionPool.getRequestById(id);
-        if (request == null) {
+        if(request == null) {
             return false;
         }
         gsmService.submitRequestNumber(request.getId(), submit);
-        if (submit == true) {
+        if(submit == true) {
             request.setStatus(Request.STATUS.WAIT_CODE);
         } else {
             User user = (User) userService.loadUserByUsername(username);
-            //create plus transaction:
-            Transaction transaction = new Transaction();
-            transaction.setRequest(request);
-            transaction.setChange_value(-request.getTransaction().get(0).getChange_value());
-            transactionService.save(transaction);
+            Transaction transaction = transactionService.drawBackForRequest(request);
             request.addTransaction(transaction);
             request.setStatus(Request.STATUS.NUMBER_REJECT);
         }
@@ -111,7 +99,7 @@ public class RequestExecutionServiceImpl implements RequestExecutionService {
     public boolean setRequestCode(long id, String code) {
         LOG.info("set code for request id=" + id);
         Request request = requestExecutionPool.getRequestById(id);
-        if (request == null) {
+        if(request == null) {
             return false;
         }
         //set code to request:

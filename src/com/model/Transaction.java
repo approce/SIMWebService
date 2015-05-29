@@ -24,7 +24,7 @@ public class Transaction {
     private Request request;
 
     @Column(name = "change_value")
-    private float change_value;
+    private double changeValue;
 
     public long getId() {
         return id;
@@ -46,11 +46,11 @@ public class Transaction {
         return request.getUser();
     }
 
-    public float getChange_value() {
-        return change_value;
+    public double getChangeValue() {
+        return changeValue;
     }
 
-    public void setChange_value(float change_value) {
-        this.change_value = change_value;
+    public void setChangeValue(double changeValue) {
+        this.changeValue = changeValue;
     }
 }

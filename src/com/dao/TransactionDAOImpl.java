@@ -22,7 +22,7 @@ public class TransactionDAOImpl extends HibernateDaoSupport implements Transacti
         //upadte user balance:
         String hql = "UPDATE User SET balance=balance + :transaction where id=:id";
         getSessionFactory().getCurrentSession().createQuery(hql)
-                .setParameter("transaction", transaction.getChange_value())
+                .setParameter("transaction", transaction.getChangeValue())
                 .setParameter("id", transaction.getUser().getId())
                 .executeUpdate();
     }
